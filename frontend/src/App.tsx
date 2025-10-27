@@ -8,6 +8,8 @@ import { Toaster } from "sonner";
 import { LoginPage } from "@/pages/LoginPage";
 import { DashboardPage } from "@/pages/DashboardPage";
 import { WelcomePage } from "@/pages/WelcomePage";
+import { PublicPresentationPage } from "@/pages/PublicPresentationPage";
+import { InternalUsePage } from "@/pages/InternalUsePage";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
 import { getToken } from "@/lib/auth";
 
@@ -35,6 +37,22 @@ function App() {
             element={
               <ProtectedRoute>
                 <DashboardPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/public-presentation"
+            element={
+              <ProtectedRoute>
+                <PublicPresentationPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/internal-use"
+            element={
+              <ProtectedRoute>
+                <InternalUsePage />
               </ProtectedRoute>
             }
           />

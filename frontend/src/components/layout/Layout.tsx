@@ -28,13 +28,25 @@ export function Layout({ children }: LayoutProps) {
     toast.success("ออกจากระบบสำเร็จ");
     navigate("/login");
   };
-
+  
   const menuItems = [
     {
       label: "Dashboard",
       icon: BarChart3,
       href: "/dashboard",
       active: location.pathname === "/dashboard",
+    },
+    {
+      label: "Public Presentation",
+      icon: BarChart3,
+      href: "/public-presentation",
+      active: location.pathname === "/public-presentation",
+    },
+    {
+      label: "Internal Use",
+      icon: BarChart3,
+      href: "/internal-use",
+      active: location.pathname === "/internal-use",
     },
     {
       label: "Home",
