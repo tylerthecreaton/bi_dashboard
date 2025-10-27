@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { TypingAnimation } from "@/components/ui/typing-animation";
 import { Button } from "@/components/ui/button";
+import PixelBlast from "@/components/PixelBlast";
 
 export function WelcomePage() {
   const navigate = useNavigate();
@@ -21,8 +22,26 @@ export function WelcomePage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <div className="max-w-2xl w-full">
+    <div className="min-h-screen flex items-center justify-center relative bg-slate-100">
+      {/* PixelBlast Background */}
+      <div className="absolute inset-0 z-0">
+        <PixelBlast
+          variant="circle"
+          pixelSize={4}
+          color="#10B981"
+          patternScale={2}
+          patternDensity={0.8}
+          enableRipples={true}
+          rippleSpeed={0.3}
+          rippleThickness={0.15}
+          edgeFade={0.3}
+          speed={0.8}
+          transparent={true}
+        />
+      </div>
+      
+      {/* Welcome Content Container */}
+      <div className="max-w-2xl w-full relative z-10">
         {/* Mac Terminal Window */}
         <div className="bg-gray-200 rounded-t-lg flex items-center px-4 py-2 space-x-2">
           <div className="flex space-x-2">

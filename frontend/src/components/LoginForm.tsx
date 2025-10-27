@@ -4,6 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { toast } from "sonner";
 import { login, saveToken } from "@/lib/auth";
+import { ShimmerButton } from "@/components/ui/shimmer-button";
 
 // สร้าง schema สำหรับ validation
 const loginSchema = z.object({
@@ -62,17 +63,19 @@ export function LoginForm({ onSuccess }: LoginFormProps) {
           <div className="border border-gray-300 rounded px-2 py-1 bg-white">
             <input
               type="text"
-              placeholder="admin"
+              placeholder="username"
               {...register("username")}
               disabled={isLoading}
               className="bg-transparent border-none outline-none text-black font-mono text-sm w-full placeholder-gray-500"
             />
           </div>
           {errors.username && (
-            <p className="text-red-600 text-xs mt-1">Error: {errors.username.message}</p>
+            <p className="text-red-600 text-xs mt-1">
+              Error: {errors.username.message}
+            </p>
           )}
         </div>
-        
+
         <div className="flex items-center space-x-2 mb-4">
           <span className="text-black">$</span>
           <span className="text-black">read -s -p "password: " password</span>
@@ -88,19 +91,28 @@ export function LoginForm({ onSuccess }: LoginFormProps) {
             />
           </div>
           {errors.password && (
-            <p className="text-red-600 text-xs mt-1">Error: {errors.password.message}</p>
+            <p className="text-red-600 text-xs mt-1">
+              Error: {errors.password.message}
+            </p>
           )}
         </div>
-        
+
         <div className="flex items-center space-x-2">
           <span className="text-black">$</span>
-          <button
+          <ShimmerButton
             type="submit"
             disabled={isLoading}
-            className="border border-gray-300 rounded px-3 py-1 bg-white text-black font-mono text-sm hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="font-mono text-sm border border-gray-300 rounded px-6 py-1 bg-white text-black hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+            shimmerColor="#000000"
+            shimmerSize="0.05em"
+            shimmerDuration="3s"
+            borderRadius="0.375rem"
+            background="rgba(255, 255, 255, 1)"
           >
-            {isLoading ? "./authenticate --processing..." : "./authenticate --submit"}
-          </button>
+            {isLoading
+              ? "./authenticate --processing..."
+              : "./authenticate --submit"}
+          </ShimmerButton>
         </div>
       </form>
     </div>
