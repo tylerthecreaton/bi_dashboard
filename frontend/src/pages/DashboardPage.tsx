@@ -19,7 +19,7 @@ export function DashboardPage() {
 
         <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           {/* Stats Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
             <StatCard
               title="Total Profit"
               value="$4,127.40"
@@ -50,15 +50,22 @@ export function DashboardPage() {
             />
           </div>
 
-          {/* Charts Grid */}
-          <div className="grid grid-cols-1 gap-6 mb-8">
-            <SalesChart />
+          {/* Main Content Grid */}
+          <div className="grid grid-cols-1 xl:grid-cols-3 gap-6 mb-8">
+            {/* Sales Chart - Takes 2 columns on xl screens */}
+            <div className="xl:col-span-2">
+              <SalesChart />
+            </div>
+
+            {/* Sales Analytics Gauge - Takes 1 column on xl screens */}
+            <div className="xl:col-span-1">
+              <SalesAnalyticsGauge />
+            </div>
           </div>
 
-          {/* Sales Table */}
-          <div className="grid grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+          {/* Sales Table - Full width */}
+          <div className="mb-8">
             <SalesTable />
-            <SalesAnalyticsGauge />
           </div>
         </main>
       </div>

@@ -1,9 +1,18 @@
 import { LoginForm } from "@/components/LoginForm";
 import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
+import { getToken } from "@/lib/auth";
 import PixelBlast from "@/components/PixelBlast";
 
 export function LoginPage() {
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const token = getToken();
+    if (token) {
+      navigate("/welcome", { replace: true });
+    }
+  }, [navigate]);
 
   const handleLoginSuccess = () => {
     navigate("/welcome");

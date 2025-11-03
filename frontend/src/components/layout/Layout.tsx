@@ -28,7 +28,7 @@ export function Layout({ children }: LayoutProps) {
     toast.success("ออกจากระบบสำเร็จ");
     navigate("/login");
   };
-  
+
   const menuItems = [
     {
       label: "Dashboard",

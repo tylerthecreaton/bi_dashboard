@@ -5,137 +5,32 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { useEffect, useRef } from "react";
+import {
+  AreaChart,
+  Area,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+} from "recharts";
 
 export function SalesChart() {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-
-  useEffect(() => {
-    if (!canvasRef.current) return;
-
-    const canvas = canvasRef.current;
-    const ctx = canvas.getContext("2d");
-    if (!ctx) return;
-
-    // Set canvas size
-    canvas.width = canvas.offsetWidth;
-    canvas.height = 300;
-
-    // Sample data
-    const months = [
-      "Jan",
-      "Feb",
-      "Mar",
-      "Apr",
-      "May",
-      "Jun",
-      "Jul",
-      "Aug",
-      "Sep",
-      "Oct",
-      "Nov",
-      "Dec",
-    ];
-    const data = [
-      2500, 3200, 2800, 3500, 3000, 3200, 3800, 3500, 3200, 4000, 3900, 3600,
-    ];
-
-    const width = canvas.width;
-    const height = canvas.height;
-    const padding = 40;
-    const maxValue = Math.max(...data);
-    const minValue = 0;
-
-    // Calculate chart area
-    const chartWidth = width - padding * 2;
-    const chartHeight = height - padding * 2;
-
-    // Draw background
-    ctx.fillStyle = "#ffffff";
-    ctx.fillRect(0, 0, width, height);
-
-    // Draw grid lines
-    ctx.strokeStyle = "#f3f4f6";
-    ctx.lineWidth = 1;
-    for (let i = 0; i <= 5; i++) {
-      const y = padding + (chartHeight / 5) * i;
-      ctx.beginPath();
-      ctx.moveTo(padding, y);
-      ctx.lineTo(width - padding, y);
-      ctx.stroke();
-    }
-
-    // Draw Y-axis labels
-    ctx.fillStyle = "#9ca3af";
-    ctx.font = "12px sans-serif";
-    ctx.textAlign = "right";
-    for (let i = 0; i <= 5; i++) {
-      const value = Math.round((maxValue / 5) * (5 - i));
-      const y = padding + (chartHeight / 5) * i + 4;
-      ctx.fillText(`$${value / 1000}K`, padding - 10, y);
-    }
-
-    // Draw chart area (filled area)
-    ctx.fillStyle = "rgba(59, 130, 246, 0.08)";
-    ctx.beginPath();
-    ctx.moveTo(padding, height - padding);
-
-    for (let i = 0; i < data.length; i++) {
-      const x = padding + (chartWidth / (data.length - 1)) * i;
-      const y =
-        height -
-        padding -
-        ((data[i] - minValue) / (maxValue - minValue)) * chartHeight;
-      if (i === 0) {
-        ctx.lineTo(x, y);
-      } else {
-        ctx.lineTo(x, y);
-      }
-    }
-    ctx.lineTo(width - padding, height - padding);
-    ctx.closePath();
-    ctx.fill();
-
-    // Draw line
-    ctx.strokeStyle = "#3b82f6";
-    ctx.lineWidth = 2;
-    ctx.beginPath();
-
-    for (let i = 0; i < data.length; i++) {
-      const x = padding + (chartWidth / (data.length - 1)) * i;
-      const y =
-        height -
-        padding -
-        ((data[i] - minValue) / (maxValue - minValue)) * chartHeight;
-      if (i === 0) {
-        ctx.moveTo(x, y);
-      } else {
-        ctx.lineTo(x, y);
-      }
-    }
-    ctx.stroke();
-
-    // Draw dots
-    ctx.fillStyle = "#3b82f6";
-    for (let i = 0; i < data.length; i++) {
-      const x = padding + (chartWidth / (data.length - 1)) * i;
-      const y =
-        height -
-        padding -
-        ((data[i] - minValue) / (maxValue - minValue)) * chartHeight;
-      ctx.beginPath();
-      ctx.arc(x, y, 3, 0, Math.PI * 2);
-      ctx.fill();
-    }
-
-    // Draw X-axis labels
-    ctx.fillStyle = "#9ca3af";
-    ctx.textAlign = "center";
-    for (let i = 0; i < data.length; i++) {
-      const x = padding + (chartWidth / (data.length - 1)) * i;
-      ctx.fillText(months[i], x, height - 15);
-    }
-  }, []);
+  // Sample data for Recharts
+  const data = [
+    { month: "Jan", sales: 2500 },
+    { month: "Feb", sales: 3200 },
+    { month: "Mar", sales: 2800 },
+    { month: "Apr", sales: 3500 },
+    { month: "May", sales: 3000 },
+    { month: "Jun", sales: 3200 },
+    { month: "Jul", sales: 3800 },
+    { month: "Aug", sales: 3500 },
+    { month: "Sep", sales: 3200 },
+    { month: "Oct", sales: 4000 },
+    { month: "Nov", sales: 3900 },
+    { month: "Dec", sales: 3600 },
+  ];
 
   return (
     <Card className="col-span-full lg:col-span-2 border-gray-200 bg-white">
@@ -156,7 +51,41 @@ export function SalesChart() {
         </div>
       </CardHeader>
       <CardContent>
-        <canvas ref={canvasRef} className="w-full" />
+        <ResponsiveContainer width="100%" height={300}>
+          <AreaChart data={data}>
+            <defs>
+              <linearGradient id="colorSales" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.8} />
+                <stop offset="95%" stopColor="#3b82f6" stopOpacity={0.08} />
+              </linearGradient>
+            </defs>
+            <CartesianGrid strokeDasharray="3 3" stroke="#f3f4f6" />
+            <XAxis dataKey="month" stroke="#9ca3af" fontSize={12} />
+            <YAxis
+              stroke="#9ca3af"
+              fontSize={12}
+              tickFormatter={(value) => `$${value / 1000}K`}
+            />
+            <Tooltip
+              formatter={(value: number) => [
+                `$${value.toLocaleString()}`,
+                "Sales",
+              ]}
+              contentStyle={{
+                backgroundColor: "white",
+                border: "1px solid #e5e7eb",
+                borderRadius: "6px",
+              }}
+            />
+            <Area
+              type="monotone"
+              dataKey="sales"
+              stroke="#3b82f6"
+              strokeWidth={2}
+              fill="url(#colorSales)"
+            />
+          </AreaChart>
+        </ResponsiveContainer>
       </CardContent>
     </Card>
   );

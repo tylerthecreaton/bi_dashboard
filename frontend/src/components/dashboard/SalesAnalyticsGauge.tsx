@@ -1,78 +1,40 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { useEffect, useRef } from "react";
+import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from "recharts";
 
 export function SalesAnalyticsGauge() {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const percentage = 72;
+  const data = [
+    { name: "Sales", value: percentage, color: "#3b82f6" },
+    { name: "Remaining", value: 100 - percentage, color: "#f3f4f6" },
+  ];
 
-  useEffect(() => {
-    if (!canvasRef.current) return;
+  const renderCustomLabel = () => {
+    return (
+      <text
+        x="50%"
+        y="50%"
+        textAnchor="middle"
+        dominantBaseline="middle"
+        className="text-4xl font-bold fill-gray-900"
+      >
+        {`${percentage}%`}
+      </text>
+    );
+  };
 
-    const canvas = canvasRef.current;
-    const ctx = canvas.getContext("2d");
-    if (!ctx) return;
-
-    canvas.width = canvas.offsetWidth;
-    canvas.height = 300;
-
-    const width = canvas.width;
-    const height = canvas.height;
-    const centerX = width / 2;
-    const centerY = height / 2;
-    const radius = Math.min(width, height) / 2 - 40;
-
-    // Draw background
-    ctx.fillStyle = "#ffffff";
-    ctx.fillRect(0, 0, width, height);
-
-    // Draw gauge background (gray)
-    ctx.strokeStyle = "#f3f4f6";
-    ctx.lineWidth = 30;
-    ctx.beginPath();
-    ctx.arc(centerX, centerY, radius, Math.PI, Math.PI * 2);
-    ctx.stroke();
-
-    // Draw gauge value (blue) - 72%
-    const percentage = 0.72;
-    ctx.strokeStyle = "#3b82f6";
-    ctx.lineWidth = 30;
-    ctx.beginPath();
-    ctx.arc(centerX, centerY, radius, Math.PI, Math.PI + Math.PI * percentage);
-    ctx.stroke();
-
-    // Draw center circle
-    ctx.fillStyle = "#ffffff";
-    ctx.beginPath();
-    ctx.arc(centerX, centerY, radius - 40, 0, Math.PI * 2);
-    ctx.fill();
-
-    // Draw percentage text
-    ctx.fillStyle = "#1f2937";
-    ctx.font = "bold 48px sans-serif";
-    ctx.textAlign = "center";
-    ctx.textBaseline = "middle";
-    ctx.fillText("72%", centerX, centerY);
-
-    // Draw label
-    ctx.fillStyle = "#9ca3af";
-    ctx.font = "14px sans-serif";
-    ctx.fillText("Sales Percentage", centerX, centerY + 40);
-
-    // Draw tick marks
-    ctx.strokeStyle = "#e5e7eb";
-    ctx.lineWidth = 2;
-    for (let i = 0; i <= 10; i++) {
-      const angle = Math.PI + (Math.PI / 10) * i;
-      const x1 = centerX + Math.cos(angle) * (radius + 5);
-      const y1 = centerY + Math.sin(angle) * (radius + 5);
-      const x2 = centerX + Math.cos(angle) * (radius + 15);
-      const y2 = centerY + Math.sin(angle) * (radius + 15);
-
-      ctx.beginPath();
-      ctx.moveTo(x1, y1);
-      ctx.lineTo(x2, y2);
-      ctx.stroke();
-    }
-  }, []);
+  const renderSubLabel = () => {
+    return (
+      <text
+        x="50%"
+        y="65%"
+        textAnchor="middle"
+        dominantBaseline="middle"
+        className="text-sm fill-gray-500"
+      >
+        Sales Percentage
+      </text>
+    );
+  };
 
   return (
     <Card className="border-gray-200 bg-white">
@@ -80,7 +42,59 @@ export function SalesAnalyticsGauge() {
         <CardTitle className="text-gray-900">Sales Analytics</CardTitle>
       </CardHeader>
       <CardContent>
-        <canvas ref={canvasRef} className="w-full" />
+        <ResponsiveContainer width="100%" height={340}>
+          <PieChart>
+            <Pie
+              data={data}
+              cx="50%"
+              cy="50%"
+              startAngle={180}
+              endAngle={0}
+              innerRadius={60}
+              outerRadius={100}
+              paddingAngle={0}
+              dataKey="value"
+            >
+              {data.map((entry, index) => (
+                <Cell key={`cell-${index}`} fill={entry.color} />
+              ))}
+            </Pie>
+            <Tooltip
+              formatter={(value: number) => [`${value}%`, ""]}
+              contentStyle={{
+                backgroundColor: "white",
+                border: "1px solid #e5e7eb",
+                borderRadius: "6px",
+              }}
+            />
+          </PieChart>
+        </ResponsiveContainer>
+        <div className="relative -mt-48">
+          <div className="flex flex-col items-center justify-center">
+            <div className="text-4xl font-bold text-gray-900">
+              {percentage}%
+            </div>
+            <div className="text-sm text-gray-500 mt-1">Sales Percentage</div>
+          </div>
+        </div>
+        <div className="mt-20 space-y-2">
+          <div className="flex items-center justify-between text-sm">
+            <div className="flex items-center gap-2">
+              <div className="w-3 h-3 bg-blue-500 rounded-full"></div>
+              <span className="text-gray-700">Sales</span>
+            </div>
+            <span className="font-semibold text-gray-900">{percentage}%</span>
+          </div>
+          <div className="flex items-center justify-between text-sm">
+            <div className="flex items-center gap-2">
+              <div className="w-3 h-3 bg-gray-200 rounded-full"></div>
+              <span className="text-gray-700">Remaining</span>
+            </div>
+            <span className="font-semibold text-gray-900">
+              {100 - percentage}%
+            </span>
+          </div>
+        </div>
       </CardContent>
     </Card>
   );
