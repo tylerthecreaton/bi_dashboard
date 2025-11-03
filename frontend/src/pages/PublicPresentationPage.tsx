@@ -4,30 +4,28 @@ import { useNavigate } from "react-router-dom";
 // Components
 import {
   HeroSection,
-  WelcomeSection,
-  FiltersSection,
-  KeyMetricsSection,
-  ChartsSection,
-  Footer,
-  SectionNavigation,
+  // WelcomeSection,
+  // FiltersSection,
+  // KeyMetricsSection,
+  // ChartsSection,
+  // Footer,
+  // SectionNavigation,
 } from "@/components/publicc/presentation";
-import { type FilterState } from "@/components/publicc/ChartFilters";
+// import { type FilterState } from "@/components/publicc/ChartFilters";
 
 // Utilities
-import { toast } from "sonner";
+// import { toast } from "sonner";
 
 export function PublicPresentationPage() {
   const navigate = useNavigate();
 
-  const handleExport = () => {
-    toast.success("Export data successfully");
-  };
+  // const handleExport = () => {
+  //   toast.success("Export data successfully");
+  // };
 
-  const handleFiltersChange = (filters: FilterState) => {
-    console.log("Filters changed:", filters);
-    // Here you would typically apply filters to your data
-    // and trigger a re-render of the charts
-  };
+  // const handleFiltersChange = (filters: FilterState) => {
+  //   console.log("Filters changed:", filters);
+  // };
 
   const handleLogin = () => {
     navigate("/login");
@@ -36,18 +34,15 @@ export function PublicPresentationPage() {
   return (
     <div className="min-h-screen">
       <HeroSection onLogin={handleLogin} />
-      <main className="relative min-h-screen">
-        {/* Background image for main content */}
+      {/* <main className="relative min-h-screen">
         <div
           className="absolute inset-0 bg-cover bg-center bg-no-repeat"
           style={{
             backgroundImage: `url("/wallpaper_2.jpg")`,
           }}
         >
-          {/* Dark overlay for main content */}
           <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/60 to-black/80" />
 
-          {/* Color gradient overlay for visual appeal */}
           <div className="absolute inset-0 bg-gradient-to-t from-indigo-900/50 via-transparent to-purple-900/30" />
         </div>
 
@@ -59,9 +54,8 @@ export function PublicPresentationPage() {
           <Footer />
         </div>
 
-        {/* Section Navigation */}
         <SectionNavigation />
-      </main>
+      </main> */}
     </div>
   );
 }

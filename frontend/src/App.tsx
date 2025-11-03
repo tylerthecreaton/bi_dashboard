@@ -8,9 +8,11 @@ import { Toaster } from "sonner";
 import { LoginPage } from "@/pages/LoginPage";
 import { DashboardPage } from "@/pages/DashboardPage";
 import { WelcomePage } from "@/pages/WelcomePage";
-// import { PublicPresentationPage } from "@/pages/PublicPresentationPage";
 import { InternalUsePage } from "@/pages/InternalUsePage";
 import { LandingPage } from "@/pages/LandingPage";
+import { DashboardViewPage } from "@/pages/DashboardViewPage";
+import { AnalyticsViewPage } from "@/pages/AnalyticsViewPage";
+import { ReportsViewPage } from "@/pages/ReportsViewPage";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
 import { getToken } from "@/lib/auth";
 
@@ -19,14 +21,11 @@ function App() {
     <Router>
       <div className="App">
         <Routes>
-          <Route
-            path="/"
-            element={<LandingPage />}
-          />
-          <Route
-            path="/login"
-            element={<LoginPage />}
-          />
+          <Route path="/" element={<LandingPage />} />
+          <Route path="/dashboard-view" element={<DashboardViewPage />} />
+          <Route path="/analytics-view" element={<AnalyticsViewPage />} />
+          <Route path="/reports-view" element={<ReportsViewPage />} />
+          <Route path="/login" element={<LoginPage />} />
           <Route
             path="/welcome"
             element={
@@ -43,10 +42,6 @@ function App() {
               </ProtectedRoute>
             }
           />
-          {/* <Route
-            path="/public-presentation"
-            element={<PublicPresentationPage />}
-          /> */}
           <Route
             path="/internal-use"
             element={
