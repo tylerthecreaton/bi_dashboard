@@ -37,12 +37,6 @@ export function Layout({ children }: LayoutProps) {
       active: location.pathname === "/dashboard",
     },
     {
-      label: "Public Presentation",
-      icon: BarChart3,
-      href: "/public-presentation",
-      active: location.pathname === "/public-presentation",
-    },
-    {
       label: "Internal Use",
       icon: BarChart3,
       href: "/internal-use",

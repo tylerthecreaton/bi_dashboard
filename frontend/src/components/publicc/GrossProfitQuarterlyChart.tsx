@@ -7,7 +7,7 @@ import {
 } from "@/components/ui/card";
 import { useEffect, useRef } from "react";
 
-export function RevenueVsTargetChart() {
+export function GrossProfitQuarterlyChart() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
@@ -21,15 +21,14 @@ export function RevenueVsTargetChart() {
     canvas.width = canvas.offsetWidth;
     canvas.height = 300;
 
-    // Sample data
-    const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-    const actualRevenue = [850, 920, 1100, 1050, 1200, 1150, 1300, 1250, 1400, 1350, 1450, 1500];
-    const targetRevenue = [1000, 1000, 1000, 1100, 1100, 1200, 1200, 1300, 1300, 1400, 1400, 1500];
+    // Sample data - Gross Profit by quarter
+    const quarters = ["Q1 2023", "Q2 2023", "Q3 2023", "Q4 2023", "Q1 2024", "Q2 2024", "Q3 2024", "Q4 2024"];
+    const grossProfit = [1200, 1350, 1400, 1500, 1600, 1650, 1700, 1750];
 
     const width = canvas.width;
     const height = canvas.height;
     const padding = 40;
-    const maxValue = Math.max(...targetRevenue, ...actualRevenue);
+    const maxValue = Math.max(...grossProfit);
     const minValue = 0;
 
     // Calculate chart area
@@ -61,30 +60,32 @@ export function RevenueVsTargetChart() {
       ctx.fillText(`$${value}K`, padding - 10, y);
     }
 
-    // Draw target line (dashed)
-    ctx.strokeStyle = "#ef4444";
-    ctx.lineWidth = 2;
-    ctx.setLineDash([5, 5]);
+    // Draw chart area (filled area)
+    ctx.fillStyle = "rgba(16, 185, 129, 0.08)";
     ctx.beginPath();
-    for (let i = 0; i < targetRevenue.length; i++) {
-      const x = padding + (chartWidth / (targetRevenue.length - 1)) * i;
-      const y = height - padding - ((targetRevenue[i] - minValue) / (maxValue - minValue)) * chartHeight;
+    ctx.moveTo(padding, height - padding);
+
+    for (let i = 0; i < grossProfit.length; i++) {
+      const x = padding + (chartWidth / (grossProfit.length - 1)) * i;
+      const y = height - padding - ((grossProfit[i] - minValue) / (maxValue - minValue)) * chartHeight;
       if (i === 0) {
-        ctx.moveTo(x, y);
+        ctx.lineTo(x, y);
       } else {
         ctx.lineTo(x, y);
       }
     }
-    ctx.stroke();
-    ctx.setLineDash([]);
+    ctx.lineTo(width - padding, height - padding);
+    ctx.closePath();
+    ctx.fill();
 
-    // Draw actual revenue line
-    ctx.strokeStyle = "#3b82f6";
+    // Draw line
+    ctx.strokeStyle = "#10b981";
     ctx.lineWidth = 3;
     ctx.beginPath();
-    for (let i = 0; i < actualRevenue.length; i++) {
-      const x = padding + (chartWidth / (actualRevenue.length - 1)) * i;
-      const y = height - padding - ((actualRevenue[i] - minValue) / (maxValue - minValue)) * chartHeight;
+
+    for (let i = 0; i < grossProfit.length; i++) {
+      const x = padding + (chartWidth / (grossProfit.length - 1)) * i;
+      const y = height - padding - ((grossProfit[i] - minValue) / (maxValue - minValue)) * chartHeight;
       if (i === 0) {
         ctx.moveTo(x, y);
       } else {
@@ -93,11 +94,11 @@ export function RevenueVsTargetChart() {
     }
     ctx.stroke();
 
-    // Draw dots for actual revenue
-    ctx.fillStyle = "#3b82f6";
-    for (let i = 0; i < actualRevenue.length; i++) {
-      const x = padding + (chartWidth / (actualRevenue.length - 1)) * i;
-      const y = height - padding - ((actualRevenue[i] - minValue) / (maxValue - minValue)) * chartHeight;
+    // Draw dots
+    ctx.fillStyle = "#10b981";
+    for (let i = 0; i < grossProfit.length; i++) {
+      const x = padding + (chartWidth / (grossProfit.length - 1)) * i;
+      const y = height - padding - ((grossProfit[i] - minValue) / (maxValue - minValue)) * chartHeight;
       ctx.beginPath();
       ctx.arc(x, y, 4, 0, Math.PI * 2);
       ctx.fill();
@@ -105,24 +106,32 @@ export function RevenueVsTargetChart() {
 
     // Draw X-axis labels
     ctx.fillStyle = "#9ca3af";
+    ctx.font = "11px sans-serif";
     ctx.textAlign = "center";
-    for (let i = 0; i < months.length; i++) {
-      const x = padding + (chartWidth / (months.length - 1)) * i;
-      ctx.fillText(months[i], x, height - 15);
+    for (let i = 0; i < quarters.length; i++) {
+      const x = padding + (chartWidth / (quarters.length - 1)) * i;
+      ctx.fillText(quarters[i], x, height - 15);
     }
 
-    // Draw legend
-    ctx.fillStyle = "#3b82f6";
-    ctx.fillRect(width - 150, 20, 15, 15);
-    ctx.fillStyle = "#374151";
-    ctx.font = "12px sans-serif";
-    ctx.textAlign = "left";
-    ctx.fillText("Actual Revenue", width - 130, 32);
+    // Draw year separator lines
+    ctx.strokeStyle = "#e5e7eb";
+    ctx.lineWidth = 1;
+    ctx.setLineDash([5, 5]);
+    
+    // Separator between 2023 and 2024
+    const separatorX = padding + (chartWidth / (quarters.length - 1)) * 3.5;
+    ctx.beginPath();
+    ctx.moveTo(separatorX, padding);
+    ctx.lineTo(separatorX, height - padding);
+    ctx.stroke();
+    ctx.setLineDash([]);
 
-    ctx.fillStyle = "#ef4444";
-    ctx.fillRect(width - 150, 45, 15, 15);
-    ctx.fillStyle = "#374151";
-    ctx.fillText("Target Revenue", width - 130, 57);
+    // Draw year labels
+    ctx.fillStyle = "#6b7280";
+    ctx.font = "bold 12px sans-serif";
+    ctx.textAlign = "center";
+    ctx.fillText("2023", padding + (chartWidth / (quarters.length - 1)) * 1.75, padding - 10);
+    ctx.fillText("2024", padding + (chartWidth / (quarters.length - 1)) * 5.75, padding - 10);
   }, []);
 
   return (
@@ -130,16 +139,16 @@ export function RevenueVsTargetChart() {
       <CardHeader>
         <div className="flex items-center justify-between">
           <div>
-            <CardTitle className="text-gray-900">Overall Revenue YTD vs Target</CardTitle>
+            <CardTitle className="text-gray-900">Gross Profit Quarterly Comparison</CardTitle>
             <CardDescription className="text-gray-500">
-              Year to Date Performance
+              Quarter-over-quarter gross profit trends
             </CardDescription>
             <p className="text-xs text-green-600 font-semibold mt-1">
-              +8.5% Above target
+              Q4 2024: +16.7% from Q4 2023
             </p>
           </div>
           <button className="px-3 py-1 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50">
-            YTD
+            Quarterly
           </button>
         </div>
       </CardHeader>

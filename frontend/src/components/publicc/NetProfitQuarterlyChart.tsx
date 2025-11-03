@@ -7,7 +7,7 @@ import {
 } from "@/components/ui/card";
 import { useEffect, useRef } from "react";
 
-export function GrossProfitQuarterlyChart() {
+export function NetProfitQuarterlyChart() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
@@ -21,14 +21,14 @@ export function GrossProfitQuarterlyChart() {
     canvas.width = canvas.offsetWidth;
     canvas.height = 300;
 
-    // Sample data - Gross Profit by quarter
+    // Sample data - Net Profit by quarter
     const quarters = ["Q1 2023", "Q2 2023", "Q3 2023", "Q4 2023", "Q1 2024", "Q2 2024", "Q3 2024", "Q4 2024"];
-    const grossProfit = [1200, 1350, 1400, 1500, 1600, 1650, 1700, 1750];
+    const netProfit = [300, 320, 340, 360, 380, 390, 400, 420];
 
     const width = canvas.width;
     const height = canvas.height;
     const padding = 40;
-    const maxValue = Math.max(...grossProfit);
+    const maxValue = Math.max(...netProfit);
     const minValue = 0;
 
     // Calculate chart area
@@ -61,13 +61,13 @@ export function GrossProfitQuarterlyChart() {
     }
 
     // Draw chart area (filled area)
-    ctx.fillStyle = "rgba(16, 185, 129, 0.08)";
+    ctx.fillStyle = "rgba(139, 92, 246, 0.08)";
     ctx.beginPath();
     ctx.moveTo(padding, height - padding);
 
-    for (let i = 0; i < grossProfit.length; i++) {
-      const x = padding + (chartWidth / (grossProfit.length - 1)) * i;
-      const y = height - padding - ((grossProfit[i] - minValue) / (maxValue - minValue)) * chartHeight;
+    for (let i = 0; i < netProfit.length; i++) {
+      const x = padding + (chartWidth / (netProfit.length - 1)) * i;
+      const y = height - padding - ((netProfit[i] - minValue) / (maxValue - minValue)) * chartHeight;
       if (i === 0) {
         ctx.lineTo(x, y);
       } else {
@@ -79,13 +79,13 @@ export function GrossProfitQuarterlyChart() {
     ctx.fill();
 
     // Draw line
-    ctx.strokeStyle = "#10b981";
+    ctx.strokeStyle = "#8b5cf6";
     ctx.lineWidth = 3;
     ctx.beginPath();
 
-    for (let i = 0; i < grossProfit.length; i++) {
-      const x = padding + (chartWidth / (grossProfit.length - 1)) * i;
-      const y = height - padding - ((grossProfit[i] - minValue) / (maxValue - minValue)) * chartHeight;
+    for (let i = 0; i < netProfit.length; i++) {
+      const x = padding + (chartWidth / (netProfit.length - 1)) * i;
+      const y = height - padding - ((netProfit[i] - minValue) / (maxValue - minValue)) * chartHeight;
       if (i === 0) {
         ctx.moveTo(x, y);
       } else {
@@ -95,10 +95,10 @@ export function GrossProfitQuarterlyChart() {
     ctx.stroke();
 
     // Draw dots
-    ctx.fillStyle = "#10b981";
-    for (let i = 0; i < grossProfit.length; i++) {
-      const x = padding + (chartWidth / (grossProfit.length - 1)) * i;
-      const y = height - padding - ((grossProfit[i] - minValue) / (maxValue - minValue)) * chartHeight;
+    ctx.fillStyle = "#8b5cf6";
+    for (let i = 0; i < netProfit.length; i++) {
+      const x = padding + (chartWidth / (netProfit.length - 1)) * i;
+      const y = height - padding - ((netProfit[i] - minValue) / (maxValue - minValue)) * chartHeight;
       ctx.beginPath();
       ctx.arc(x, y, 4, 0, Math.PI * 2);
       ctx.fill();
@@ -132,6 +132,16 @@ export function GrossProfitQuarterlyChart() {
     ctx.textAlign = "center";
     ctx.fillText("2023", padding + (chartWidth / (quarters.length - 1)) * 1.75, padding - 10);
     ctx.fillText("2024", padding + (chartWidth / (quarters.length - 1)) * 5.75, padding - 10);
+
+    // Draw quarterly growth indicators
+    ctx.fillStyle = "#10b981";
+    ctx.font = "10px sans-serif";
+    for (let i = 1; i < netProfit.length; i++) {
+      const growth = ((netProfit[i] - netProfit[i-1]) / netProfit[i-1] * 100).toFixed(1);
+      const x = padding + (chartWidth / (netProfit.length - 1)) * i;
+      const y = height - padding - ((netProfit[i] - minValue) / (maxValue - minValue)) * chartHeight;
+      ctx.fillText(`+${growth}%`, x, y + 20);
+    }
   }, []);
 
   return (
@@ -139,9 +149,9 @@ export function GrossProfitQuarterlyChart() {
       <CardHeader>
         <div className="flex items-center justify-between">
           <div>
-            <CardTitle className="text-gray-900">Gross Profit Quarterly Comparison</CardTitle>
+            <CardTitle className="text-gray-900">Net Profit Quarterly Comparison</CardTitle>
             <CardDescription className="text-gray-500">
-              Quarter-over-quarter gross profit trends
+              Quarter-over-quarter net profit trends
             </CardDescription>
             <p className="text-xs text-green-600 font-semibold mt-1">
               Q4 2024: +16.7% from Q4 2023

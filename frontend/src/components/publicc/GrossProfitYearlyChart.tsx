@@ -7,7 +7,7 @@ import {
 } from "@/components/ui/card";
 import { useEffect, useRef } from "react";
 
-export function RevenueByQuarterChart() {
+export function GrossProfitYearlyChart() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
@@ -21,33 +21,31 @@ export function RevenueByQuarterChart() {
     canvas.width = canvas.offsetWidth;
     canvas.height = 300;
 
-    // Sample data - Revenue by quarter separated by business type
-    const quarters = ["Q1", "Q2", "Q3", "Q4"];
-    const coreBusiness = [2000, 2100, 2200, 2300];
-    const newBusiness = [800, 900, 950, 1000];
-    const jvBusiness = [300, 350, 400, 450];
+    // Sample data - Gross Profit by year and business type
+    const years = ["2020", "2021", "2022", "2023", "2024"];
+    const projectProfit = [800, 950, 1100, 1250, 1400];
+    const servicesProfit = [500, 600, 700, 800, 900];
+    const distributeProfit = [300, 350, 400, 450, 500];
 
     const width = canvas.width;
     const height = canvas.height;
     const padding = 40;
-    const maxValue = quarters.reduce((max, quarter, index) => {
-      const total = coreBusiness[index] + newBusiness[index] + jvBusiness[index];
-      return Math.max(max, total);
-    }, 0);
+    const maxValue = Math.max(...projectProfit, ...servicesProfit, ...distributeProfit);
 
     // Calculate chart area
     const chartWidth = width - padding * 2;
     const chartHeight = height - padding * 2;
 
     // Bar settings
-    const barWidth = chartWidth / quarters.length / 1.5;
-    const barSpacing = chartWidth / quarters.length / 3;
+    const barGroupWidth = chartWidth / years.length;
+    const barWidth = barGroupWidth / 4; // 3 bars + spacing
+    const barSpacing = barWidth / 4;
 
     // Colors for different business types
     const colors = {
-      core: "#3b82f6",
-      new: "#10b981",
-      jv: "#f59e0b"
+      project: "#3b82f6",
+      services: "#10b981",
+      distribute: "#f59e0b"
     };
 
     // Draw background
@@ -75,54 +73,47 @@ export function RevenueByQuarterChart() {
       ctx.fillText(`$${value}K`, padding - 10, y);
     }
 
-    // Draw stacked bars for each quarter
-    quarters.forEach((quarter, quarterIndex) => {
-      const barX = padding + (barWidth + barSpacing) * quarterIndex + barSpacing / 2;
-      
-      // Calculate total height for this quarter
-      const totalHeight = ((coreBusiness[quarterIndex] + newBusiness[quarterIndex] + jvBusiness[quarterIndex]) / maxValue) * chartHeight;
-      
-      // Draw JV business (bottom)
-      const jvHeight = (jvBusiness[quarterIndex] / maxValue) * chartHeight;
-      const jvY = height - padding - jvHeight;
-      
-      ctx.fillStyle = colors.jv;
-      ctx.fillRect(barX, jvY, barWidth, jvHeight);
+    // Draw bars for each year
+    years.forEach((year, yearIndex) => {
+      const groupX = padding + (barGroupWidth * yearIndex) + (barGroupWidth / 2);
 
-      // Draw new business (middle)
-      const newHeight = (newBusiness[quarterIndex] / maxValue) * chartHeight;
-      const newY = jvY - newHeight;
+      // Project bar
+      const projectHeight = (projectProfit[yearIndex] / maxValue) * chartHeight;
+      const projectX = groupX - barWidth - barSpacing;
+      const projectY = height - padding - projectHeight;
       
-      ctx.fillStyle = colors.new;
-      ctx.fillRect(barX, newY, barWidth, newHeight);
+      ctx.fillStyle = colors.project;
+      ctx.fillRect(projectX, projectY, barWidth, projectHeight);
 
-      // Draw core business (top)
-      const coreHeight = (coreBusiness[quarterIndex] / maxValue) * chartHeight;
-      const coreY = newY - coreHeight;
+      // Services bar
+      const servicesHeight = (servicesProfit[yearIndex] / maxValue) * chartHeight;
+      const servicesX = groupX - barSpacing / 2;
+      const servicesY = height - padding - servicesHeight;
       
-      ctx.fillStyle = colors.core;
-      ctx.fillRect(barX, coreY, barWidth, coreHeight);
+      ctx.fillStyle = colors.services;
+      ctx.fillRect(servicesX, servicesY, barWidth, servicesHeight);
 
-      // Draw quarter label
+      // Distribute bar
+      const distributeHeight = (distributeProfit[yearIndex] / maxValue) * chartHeight;
+      const distributeX = groupX + barWidth + barSpacing / 2;
+      const distributeY = height - padding - distributeHeight;
+      
+      ctx.fillStyle = colors.distribute;
+      ctx.fillRect(distributeX, distributeY, barWidth, distributeHeight);
+
+      // Draw year label
       ctx.fillStyle = "#9ca3af";
       ctx.font = "12px sans-serif";
       ctx.textAlign = "center";
-      ctx.fillText(quarter, barX + barWidth / 2, height - 15);
-
-      // Draw total value on top of each stack
-      const total = coreBusiness[quarterIndex] + newBusiness[quarterIndex] + jvBusiness[quarterIndex];
-      ctx.fillStyle = "#1f2937";
-      ctx.font = "bold 12px sans-serif";
-      ctx.textAlign = "center";
-      ctx.fillText(`$${total}K`, barX + barWidth / 2, coreY - 5);
+      ctx.fillText(year, groupX, height - 15);
     });
 
     // Draw legend
     const legendY = 20;
     const legendItems = [
-      { label: "Core Business", color: colors.core },
-      { label: "New Business", color: colors.new },
-      { label: "JV", color: colors.jv }
+      { label: "Project", color: colors.project },
+      { label: "Services", color: colors.services },
+      { label: "Distribute", color: colors.distribute }
     ];
 
     legendItems.forEach((item, index) => {
@@ -144,16 +135,16 @@ export function RevenueByQuarterChart() {
       <CardHeader>
         <div className="flex items-center justify-between">
           <div>
-            <CardTitle className="text-gray-900">Revenue by Quarter</CardTitle>
+            <CardTitle className="text-gray-900">Gross Profit Yearly Comparison</CardTitle>
             <CardDescription className="text-gray-500">
-              Separated by Core Business, New Business, and JV
+              Year-over-year comparison by business type
             </CardDescription>
-            <p className="text-xs text-blue-600 font-semibold mt-1">
-              Q4 Growth: +12.5% from Q3
+            <p className="text-xs text-green-600 font-semibold mt-1">
+              2024 Growth: +12% from 2023
             </p>
           </div>
           <button className="px-3 py-1 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50">
-            Quarterly
+            Yearly
           </button>
         </div>
       </CardHeader>

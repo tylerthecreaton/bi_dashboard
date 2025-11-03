@@ -8,8 +8,9 @@ import { Toaster } from "sonner";
 import { LoginPage } from "@/pages/LoginPage";
 import { DashboardPage } from "@/pages/DashboardPage";
 import { WelcomePage } from "@/pages/WelcomePage";
-import { PublicPresentationPage } from "@/pages/PublicPresentationPage";
+// import { PublicPresentationPage } from "@/pages/PublicPresentationPage";
 import { InternalUsePage } from "@/pages/InternalUsePage";
+import { LandingPage } from "@/pages/LandingPage";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
 import { getToken } from "@/lib/auth";
 
@@ -18,6 +19,10 @@ function App() {
     <Router>
       <div className="App">
         <Routes>
+          <Route
+            path="/"
+            element={<LandingPage />}
+          />
           <Route
             path="/login"
             element={<LoginPage />}
@@ -38,14 +43,10 @@ function App() {
               </ProtectedRoute>
             }
           />
-          <Route
+          {/* <Route
             path="/public-presentation"
-            element={
-              <ProtectedRoute>
-                <PublicPresentationPage />
-              </ProtectedRoute>
-            }
-          />
+            element={<PublicPresentationPage />}
+          /> */}
           <Route
             path="/internal-use"
             element={

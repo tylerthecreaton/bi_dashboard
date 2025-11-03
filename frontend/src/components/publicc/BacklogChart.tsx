@@ -7,7 +7,7 @@ import {
 } from "@/components/ui/card";
 import { useEffect, useRef } from "react";
 
-export function NetProfitQuarterlyChart() {
+export function BacklogChart() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
@@ -21,14 +21,15 @@ export function NetProfitQuarterlyChart() {
     canvas.width = canvas.offsetWidth;
     canvas.height = 300;
 
-    // Sample data - Net Profit by quarter
+    // Sample data - Backlog by quarter
     const quarters = ["Q1 2023", "Q2 2023", "Q3 2023", "Q4 2023", "Q1 2024", "Q2 2024", "Q3 2024", "Q4 2024"];
-    const netProfit = [300, 320, 340, 360, 380, 390, 400, 420];
+    const backlog = [8500, 8200, 7800, 7500, 7200, 6800, 6500, 6200];
+    const newBacklog = [1200, 1100, 1000, 900, 850, 800, 750, 700];
 
     const width = canvas.width;
     const height = canvas.height;
     const padding = 40;
-    const maxValue = Math.max(...netProfit);
+    const maxValue = Math.max(...backlog);
     const minValue = 0;
 
     // Calculate chart area
@@ -60,14 +61,14 @@ export function NetProfitQuarterlyChart() {
       ctx.fillText(`$${value}K`, padding - 10, y);
     }
 
-    // Draw chart area (filled area)
-    ctx.fillStyle = "rgba(139, 92, 246, 0.08)";
+    // Draw total backlog area
+    ctx.fillStyle = "rgba(59, 130, 246, 0.1)";
     ctx.beginPath();
     ctx.moveTo(padding, height - padding);
 
-    for (let i = 0; i < netProfit.length; i++) {
-      const x = padding + (chartWidth / (netProfit.length - 1)) * i;
-      const y = height - padding - ((netProfit[i] - minValue) / (maxValue - minValue)) * chartHeight;
+    for (let i = 0; i < backlog.length; i++) {
+      const x = padding + (chartWidth / (backlog.length - 1)) * i;
+      const y = height - padding - ((backlog[i] - minValue) / (maxValue - minValue)) * chartHeight;
       if (i === 0) {
         ctx.lineTo(x, y);
       } else {
@@ -78,14 +79,14 @@ export function NetProfitQuarterlyChart() {
     ctx.closePath();
     ctx.fill();
 
-    // Draw line
-    ctx.strokeStyle = "#8b5cf6";
+    // Draw total backlog line
+    ctx.strokeStyle = "#3b82f6";
     ctx.lineWidth = 3;
     ctx.beginPath();
 
-    for (let i = 0; i < netProfit.length; i++) {
-      const x = padding + (chartWidth / (netProfit.length - 1)) * i;
-      const y = height - padding - ((netProfit[i] - minValue) / (maxValue - minValue)) * chartHeight;
+    for (let i = 0; i < backlog.length; i++) {
+      const x = padding + (chartWidth / (backlog.length - 1)) * i;
+      const y = height - padding - ((backlog[i] - minValue) / (maxValue - minValue)) * chartHeight;
       if (i === 0) {
         ctx.moveTo(x, y);
       } else {
@@ -94,13 +95,41 @@ export function NetProfitQuarterlyChart() {
     }
     ctx.stroke();
 
-    // Draw dots
-    ctx.fillStyle = "#8b5cf6";
-    for (let i = 0; i < netProfit.length; i++) {
-      const x = padding + (chartWidth / (netProfit.length - 1)) * i;
-      const y = height - padding - ((netProfit[i] - minValue) / (maxValue - minValue)) * chartHeight;
+    // Draw new backlog line
+    ctx.strokeStyle = "#10b981";
+    ctx.lineWidth = 2;
+    ctx.setLineDash([5, 5]);
+    ctx.beginPath();
+
+    for (let i = 0; i < newBacklog.length; i++) {
+      const x = padding + (chartWidth / (newBacklog.length - 1)) * i;
+      const y = height - padding - ((newBacklog[i] - minValue) / (maxValue - minValue)) * chartHeight;
+      if (i === 0) {
+        ctx.moveTo(x, y);
+      } else {
+        ctx.lineTo(x, y);
+      }
+    }
+    ctx.stroke();
+    ctx.setLineDash([]);
+
+    // Draw dots for total backlog
+    ctx.fillStyle = "#3b82f6";
+    for (let i = 0; i < backlog.length; i++) {
+      const x = padding + (chartWidth / (backlog.length - 1)) * i;
+      const y = height - padding - ((backlog[i] - minValue) / (maxValue - minValue)) * chartHeight;
       ctx.beginPath();
       ctx.arc(x, y, 4, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+    // Draw dots for new backlog
+    ctx.fillStyle = "#10b981";
+    for (let i = 0; i < newBacklog.length; i++) {
+      const x = padding + (chartWidth / (newBacklog.length - 1)) * i;
+      const y = height - padding - ((newBacklog[i] - minValue) / (maxValue - minValue)) * chartHeight;
+      ctx.beginPath();
+      ctx.arc(x, y, 3, 0, Math.PI * 2);
       ctx.fill();
     }
 
@@ -133,15 +162,29 @@ export function NetProfitQuarterlyChart() {
     ctx.fillText("2023", padding + (chartWidth / (quarters.length - 1)) * 1.75, padding - 10);
     ctx.fillText("2024", padding + (chartWidth / (quarters.length - 1)) * 5.75, padding - 10);
 
-    // Draw quarterly growth indicators
+    // Draw legend
+    const legendY = 20;
+    
+    // Total backlog legend
+    ctx.fillStyle = "#3b82f6";
+    ctx.fillRect(width - 150, legendY, 15, 15);
+    ctx.fillStyle = "#374151";
+    ctx.font = "12px sans-serif";
+    ctx.textAlign = "left";
+    ctx.fillText("Total Backlog", width - 130, legendY + 12);
+
+    // New backlog legend
     ctx.fillStyle = "#10b981";
-    ctx.font = "10px sans-serif";
-    for (let i = 1; i < netProfit.length; i++) {
-      const growth = ((netProfit[i] - netProfit[i-1]) / netProfit[i-1] * 100).toFixed(1);
-      const x = padding + (chartWidth / (netProfit.length - 1)) * i;
-      const y = height - padding - ((netProfit[i] - minValue) / (maxValue - minValue)) * chartHeight;
-      ctx.fillText(`+${growth}%`, x, y + 20);
-    }
+    ctx.fillRect(width - 150, legendY + 25, 15, 15);
+    ctx.fillStyle = "#374151";
+    ctx.fillText("New Backlog", width - 130, legendY + 37);
+
+    // Draw current values
+    ctx.fillStyle = "#1f2937";
+    ctx.font = "bold 12px sans-serif";
+    ctx.textAlign = "left";
+    ctx.fillText(`Current: $${backlog[backlog.length - 1]}K`, padding, padding - 10);
+    ctx.fillText(`New: $${newBacklog[newBacklog.length - 1]}K`, padding + 120, padding - 10);
   }, []);
 
   return (
@@ -149,12 +192,12 @@ export function NetProfitQuarterlyChart() {
       <CardHeader>
         <div className="flex items-center justify-between">
           <div>
-            <CardTitle className="text-gray-900">Net Profit Quarterly Comparison</CardTitle>
+            <CardTitle className="text-gray-900">Backlog Analysis</CardTitle>
             <CardDescription className="text-gray-500">
-              Quarter-over-quarter net profit trends
+              Total and new backlog trends over time
             </CardDescription>
             <p className="text-xs text-green-600 font-semibold mt-1">
-              Q4 2024: +16.7% from Q4 2023
+              Reduction: -27.1% from Q1 2023
             </p>
           </div>
           <button className="px-3 py-1 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50">
