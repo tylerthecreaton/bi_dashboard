@@ -1,5 +1,7 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@100..900&display=swap');
 @import "tailwindcss";
 @import "tw-animate-css";
+
 
 @custom-variant dark (&:is(.dark *));
 
@@ -139,5 +141,6 @@
   }
   body {
     @apply bg-background text-foreground;
+    font-family: 'Noto Sans Thai', sans-serif;
   }
 }
