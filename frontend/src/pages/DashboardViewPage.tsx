@@ -45,8 +45,25 @@ export function DashboardViewPage() {
         </div>
 
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-          <KeyMetricsSection />
-          <ChartsSection />
+          {/* Key Metrics Section */}
+          <section className="mb-16">
+            <div className="bg-white/5 backdrop-blur-sm rounded-xl p-8 border border-white/10">
+              <h2 className="text-2xl font-semibold text-white mb-6">
+                Key Performance Metrics
+              </h2>
+              <KeyMetricsSection />
+            </div>
+          </section>
+
+          {/* Charts Section */}
+          <section className="mb-16">
+            <div className="bg-white/5 backdrop-blur-sm rounded-xl p-8 border border-white/10">
+              <h2 className="text-2xl font-semibold text-white mb-6">
+                Data Visualization
+              </h2>
+              <ChartsSection />
+            </div>
+          </section>
         </div>
       </div>
     </div>
