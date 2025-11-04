@@ -26,7 +26,7 @@ export function Layout({ children }: LayoutProps) {
   const handleLogout = () => {
     removeToken();
     toast.success("ออกจากระบบสำเร็จ");
-    navigate("/login");
+    navigate("/");
   };
 
   const menuItems = [
