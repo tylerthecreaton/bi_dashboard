@@ -5,247 +5,229 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { useEffect, useRef } from "react";
+import {
+  AreaChart,
+  Area,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+  Legend,
+} from "recharts";
+
+const data = [
+  { name: "Jan", income: 3200, expense: 2800 },
+  { name: "Feb", income: 3500, expense: 2900 },
+  { name: "Mar", income: 3100, expense: 2700 },
+  { name: "Apr", income: 3800, expense: 3100 },
+  { name: "May", income: 4200, expense: 3300 },
+  { name: "Jun", income: 3900, expense: 3200 },
+  { name: "Jul", income: 4500, expense: 3500 },
+  { name: "Aug", income: 4100, expense: 3400 },
+  { name: "Sep", income: 4400, expense: 3600 },
+  { name: "Oct", income: 4700, expense: 3800 },
+  { name: "Nov", income: 4600, expense: 3700 },
+  { name: "Dec", income: 4900, expense: 3900 },
+];
 
 export function CashFlowChart() {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-
-  useEffect(() => {
-    if (!canvasRef.current) return;
-
-    const canvas = canvasRef.current;
-    const ctx = canvas.getContext("2d");
-    if (!ctx) return;
-
-    // Set canvas size
-    canvas.width = canvas.offsetWidth;
-    canvas.height = 300;
-
-    // Sample data - Cash Flow by month
-    const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-    const cashIn = [3200, 3500, 3100, 3800, 4200, 3900, 4500, 4100, 4400, 4700, 4600, 4900];
-    const cashOut = [2800, 2900, 2700, 3100, 3300, 3200, 3500, 3400, 3600, 3800, 3700, 3900];
-
-    const width = canvas.width;
-    const height = canvas.height;
-    const padding = 40;
-    const maxValue = Math.max(...cashIn, ...cashOut);
-    const minValue = 0;
-
-    // Calculate chart area
-    const chartWidth = width - padding * 2;
-    const chartHeight = height - padding * 2;
-
-    // Draw background
-    ctx.fillStyle = "#ffffff";
-    ctx.fillRect(0, 0, width, height);
-
-    // Draw grid lines
-    ctx.strokeStyle = "#f3f4f6";
-    ctx.lineWidth = 1;
-    for (let i = 0; i <= 5; i++) {
-      const y = padding + (chartHeight / 5) * i;
-      ctx.beginPath();
-      ctx.moveTo(padding, y);
-      ctx.lineTo(width - padding, y);
-      ctx.stroke();
-    }
-
-    // Draw zero line (important for cash flow)
-    ctx.strokeStyle = "#9ca3af";
-    ctx.lineWidth = 2;
-    ctx.beginPath();
-    ctx.moveTo(padding, height - padding);
-    ctx.lineTo(width - padding, height - padding);
-    ctx.stroke();
-
-    // Draw Y-axis labels
-    ctx.fillStyle = "#9ca3af";
-    ctx.font = "12px sans-serif";
-    ctx.textAlign = "right";
-    for (let i = 0; i <= 5; i++) {
-      const value = Math.round((maxValue / 5) * (5 - i));
-      const y = padding + (chartHeight / 5) * i + 4;
-      ctx.fillText(`$${value}K`, padding - 10, y);
-    }
-
-    // Draw cash in area
-    ctx.fillStyle = "rgba(16, 185, 129, 0.1)";
-    ctx.beginPath();
-    ctx.moveTo(padding, height - padding);
-
-    for (let i = 0; i < cashIn.length; i++) {
-      const x = padding + (chartWidth / (cashIn.length - 1)) * i;
-      const y = height - padding - ((cashIn[i] - minValue) / (maxValue - minValue)) * chartHeight;
-      if (i === 0) {
-        ctx.lineTo(x, y);
-      } else {
-        ctx.lineTo(x, y);
-      }
-    }
-    ctx.lineTo(width - padding, height - padding);
-    ctx.closePath();
-    ctx.fill();
-
-    // Draw cash out area
-    ctx.fillStyle = "rgba(239, 68, 68, 0.1)";
-    ctx.beginPath();
-    ctx.moveTo(padding, height - padding);
-
-    for (let i = 0; i < cashOut.length; i++) {
-      const x = padding + (chartWidth / (cashOut.length - 1)) * i;
-      const y = height - padding - ((cashOut[i] - minValue) / (maxValue - minValue)) * chartHeight;
-      if (i === 0) {
-        ctx.lineTo(x, y);
-      } else {
-        ctx.lineTo(x, y);
-      }
-    }
-    ctx.lineTo(width - padding, height - padding);
-    ctx.closePath();
-    ctx.fill();
-
-    // Draw cash in line
-    ctx.strokeStyle = "#10b981";
-    ctx.lineWidth = 3;
-    ctx.beginPath();
-
-    for (let i = 0; i < cashIn.length; i++) {
-      const x = padding + (chartWidth / (cashIn.length - 1)) * i;
-      const y = height - padding - ((cashIn[i] - minValue) / (maxValue - minValue)) * chartHeight;
-      if (i === 0) {
-        ctx.moveTo(x, y);
-      } else {
-        ctx.lineTo(x, y);
-      }
-    }
-    ctx.stroke();
-
-    // Draw cash out line
-    ctx.strokeStyle = "#ef4444";
-    ctx.lineWidth = 3;
-    ctx.beginPath();
-
-    for (let i = 0; i < cashOut.length; i++) {
-      const x = padding + (chartWidth / (cashOut.length - 1)) * i;
-      const y = height - padding - ((cashOut[i] - minValue) / (maxValue - minValue)) * chartHeight;
-      if (i === 0) {
-        ctx.moveTo(x, y);
-      } else {
-        ctx.lineTo(x, y);
-      }
-    }
-    ctx.stroke();
-
-    // Draw dots for cash in
-    ctx.fillStyle = "#10b981";
-    for (let i = 0; i < cashIn.length; i++) {
-      const x = padding + (chartWidth / (cashIn.length - 1)) * i;
-      const y = height - padding - ((cashIn[i] - minValue) / (maxValue - minValue)) * chartHeight;
-      ctx.beginPath();
-      ctx.arc(x, y, 4, 0, Math.PI * 2);
-      ctx.fill();
-    }
-
-    // Draw dots for cash out
-    ctx.fillStyle = "#ef4444";
-    for (let i = 0; i < cashOut.length; i++) {
-      const x = padding + (chartWidth / (cashOut.length - 1)) * i;
-      const y = height - padding - ((cashOut[i] - minValue) / (maxValue - minValue)) * chartHeight;
-      ctx.beginPath();
-      ctx.arc(x, y, 4, 0, Math.PI * 2);
-      ctx.fill();
-    }
-
-    // Draw X-axis labels
-    ctx.fillStyle = "#9ca3af";
-    ctx.font = "12px sans-serif";
-    ctx.textAlign = "center";
-    for (let i = 0; i < months.length; i++) {
-      const x = padding + (chartWidth / (months.length - 1)) * i;
-      ctx.fillText(months[i], x, height - 15);
-    }
-
-    // Draw net cash flow indicators (positive/negative areas between lines)
-    for (let i = 0; i < months.length - 1; i++) {
-      const x1 = padding + (chartWidth / (months.length - 1)) * i;
-      const x2 = padding + (chartWidth / (months.length - 1)) * (i + 1);
-      const y1_in = height - padding - ((cashIn[i] - minValue) / (maxValue - minValue)) * chartHeight;
-      const y2_in = height - padding - ((cashIn[i + 1] - minValue) / (maxValue - minValue)) * chartHeight;
-      const y1_out = height - padding - ((cashOut[i] - minValue) / (maxValue - minValue)) * chartHeight;
-      const y2_out = height - padding - ((cashOut[i + 1] - minValue) / (maxValue - minValue)) * chartHeight;
-
-      // Calculate net flow area
-      const netFlow = cashIn[i] - cashOut[i];
-      const netColor = netFlow >= 0 ? "rgba(16, 185, 129, 0.2)" : "rgba(239, 68, 68, 0.2)";
-      
-      ctx.fillStyle = netColor;
-      ctx.beginPath();
-      ctx.moveTo(x1, y1_in);
-      ctx.lineTo(x2, y2_in);
-      ctx.lineTo(x2, y2_out);
-      ctx.lineTo(x1, y1_out);
-      ctx.closePath();
-      ctx.fill();
-    }
-
-    // Draw legend
-    const legendY = 20;
-    
-    // Cash in legend
-    ctx.fillStyle = "#10b981";
-    ctx.fillRect(width - 150, legendY, 15, 15);
-    ctx.fillStyle = "#374151";
-    ctx.font = "12px sans-serif";
-    ctx.textAlign = "left";
-    ctx.fillText("Cash In", width - 130, legendY + 12);
-
-    // Cash out legend
-    ctx.fillStyle = "#ef4444";
-    ctx.fillRect(width - 150, legendY + 25, 15, 15);
-    ctx.fillStyle = "#374151";
-    ctx.fillText("Cash Out", width - 130, legendY + 37);
-
-    // Net flow legend
-    ctx.fillStyle = "#6b7280";
-    ctx.fillRect(width - 150, legendY + 50, 15, 15);
-    ctx.fillStyle = "#374151";
-    ctx.fillText("Net Flow", width - 130, legendY + 62);
-
-    // Draw current values
-    const currentCashIn = cashIn[cashIn.length - 1];
-    const currentCashOut = cashOut[cashOut.length - 1];
-    const netFlow = currentCashIn - currentCashOut;
-    
-    ctx.fillStyle = "#1f2937";
-    ctx.font = "bold 12px sans-serif";
-    ctx.textAlign = "left";
-    ctx.fillText(`Cash In: $${currentCashIn}K`, padding, padding - 10);
-    ctx.fillText(`Cash Out: $${currentCashOut}K`, padding + 120, padding - 10);
-    ctx.fillStyle = netFlow >= 0 ? "#10b981" : "#ef4444";
-    ctx.fillText(`Net: $${netFlow}K`, padding + 240, padding - 10);
-  }, []);
+  const currentMonth = data[data.length - 1];
+  const netFlow = currentMonth.income - currentMonth.expense;
 
   return (
-    <Card className="col-span-full lg:col-span-2 border-gray-200 bg-white">
+    <Card className="col-span-full lg:col-span-2 border-gray-200 bg-white shadow-sm">
       <CardHeader>
         <div className="flex items-center justify-between">
           <div>
-            <CardTitle className="text-gray-900">Cash Flow Analysis</CardTitle>
-            <CardDescription className="text-gray-500">
+            <CardTitle className="text-gray-900 text-lg font-semibold">
+              Cash Flow Analysis
+            </CardTitle>
+            <CardDescription className="text-gray-500 text-sm">
               Monthly cash in and cash out trends
             </CardDescription>
-            <p className="text-xs text-green-600 font-semibold mt-1">
-              Positive cash flow: $1,000K this month
+            <p className="text-xs text-emerald-600 font-medium mt-2 flex items-center gap-1">
+              <span className="inline-block w-2 h-2 rounded-full bg-emerald-500"></span>
+              Positive cash flow: ${(netFlow / 1000).toFixed(1)}M this month
             </p>
           </div>
-          <button className="px-3 py-1 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50">
+          <button className="px-3 py-1.5 text-xs font-medium text-gray-600 bg-gray-50 border border-gray-200 rounded-lg hover:bg-gray-100 transition-colors cursor-pointer">
             Monthly
           </button>
         </div>
       </CardHeader>
       <CardContent>
-        <canvas ref={canvasRef} className="w-full" />
+        <div className="h-[300px] w-full">
+          <ResponsiveContainer width="100%" height="100%">
+            <AreaChart
+              data={data}
+              margin={{
+                top: 20,
+                right: 30,
+                left: 20,
+                bottom: 5,
+              }}
+            >
+              <defs>
+                <linearGradient id="colorIncome" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="5%" stopColor="#10b981" stopOpacity={0.3} />
+                  <stop offset="95%" stopColor="#10b981" stopOpacity={0} />
+                </linearGradient>
+                <linearGradient id="colorExpense" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="5%" stopColor="#ef4444" stopOpacity={0.3} />
+                  <stop offset="95%" stopColor="#ef4444" stopOpacity={0} />
+                </linearGradient>
+              </defs>
+              <CartesianGrid
+                strokeDasharray="3 3"
+                vertical={false}
+                stroke="#f3f4f6"
+              />
+              <XAxis
+                dataKey="name"
+                axisLine={false}
+                tickLine={false}
+                tick={{ fill: "#6b7280", fontSize: 12 }}
+                dy={10}
+              />
+              <YAxis
+                axisLine={false}
+                tickLine={false}
+                tick={{ fill: "#6b7280", fontSize: 12 }}
+                tickFormatter={(value) => `$${value / 1000}M`}
+              />
+              <Tooltip
+                cursor={{
+                  stroke: "#9ca3af",
+                  strokeWidth: 1,
+                  strokeDasharray: "4 4",
+                }}
+                content={({ active, payload, label }) => {
+                  if (active && payload && payload.length) {
+                    return (
+                      <div className="bg-white p-3 border border-gray-100 shadow-lg rounded-xl">
+                        <p className="text-sm font-semibold text-gray-900 mb-2">
+                          {label}
+                        </p>
+                        <div className="flex items-center gap-2 mb-1">
+                          <div className="w-2 h-2 rounded-full bg-emerald-500" />
+                          <span className="text-xs text-gray-500">
+                            Cash In:
+                          </span>
+                          <span className="text-sm font-medium text-gray-900">
+                            ${payload[0].value?.toLocaleString()}
+                          </span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <div className="w-2 h-2 rounded-full bg-red-500" />
+                          <span className="text-xs text-gray-500">
+                            Cash Out:
+                          </span>
+                          <span className="text-sm font-medium text-gray-900">
+                            ${payload[1].value?.toLocaleString()}
+                          </span>
+                        </div>
+                        <div className="mt-2 pt-2 border-t border-gray-100 flex justify-between items-center">
+                          <span className="text-xs text-gray-500">
+                            Net Flow:
+                          </span>
+                          <span
+                            className={`text-sm font-bold ${
+                              (payload[0].value as number) -
+                                (payload[1].value as number) >=
+                              0
+                                ? "text-emerald-600"
+                                : "text-red-600"
+                            }`}
+                          >
+                            $
+                            {(
+                              (payload[0].value as number) -
+                              (payload[1].value as number)
+                            ).toLocaleString()}
+                          </span>
+                        </div>
+                      </div>
+                    );
+                  }
+                  return null;
+                }}
+              />
+              <Legend
+                verticalAlign="top"
+                height={36}
+                iconType="circle"
+                formatter={(value) => (
+                  <span className="text-sm text-gray-600 font-medium ml-1">
+                    {value}
+                  </span>
+                )}
+              />
+              <Area
+                type="monotone"
+                dataKey="income"
+                name="Cash In"
+                stroke="#10b981"
+                strokeWidth={2}
+                fillOpacity={1}
+                fill="url(#colorIncome)"
+              />
+              <Area
+                type="monotone"
+                dataKey="expense"
+                name="Cash Out"
+                stroke="#ef4444"
+                strokeWidth={2}
+                fillOpacity={1}
+                fill="url(#colorExpense)"
+              />
+            </AreaChart>
+          </ResponsiveContainer>
+        </div>
+        <div className="mt-6 grid grid-cols-3 gap-4 border-t border-gray-100 pt-4">
+          <div className="flex flex-col">
+            <span className="text-xs text-gray-400">Total Cash In</span>
+            <span className="font-semibold text-gray-900 text-base">
+              $
+              {(
+                data.reduce((acc, curr) => acc + curr.income, 0) / 1000
+              ).toFixed(1)}
+              M
+            </span>
+          </div>
+          <div className="flex flex-col">
+            <span className="text-xs text-gray-400">Total Cash Out</span>
+            <span className="font-semibold text-gray-900 text-base">
+              $
+              {(
+                data.reduce((acc, curr) => acc + curr.expense, 0) / 1000
+              ).toFixed(1)}
+              M
+            </span>
+          </div>
+          <div className="flex flex-col text-right">
+            <span className="text-xs text-gray-400">Net Cash Flow</span>
+            <span
+              className={`font-semibold text-base ${
+                data.reduce(
+                  (acc, curr) => acc + (curr.income - curr.expense),
+                  0
+                ) >= 0
+                  ? "text-emerald-600"
+                  : "text-red-600"
+              }`}
+            >
+              $
+              {(
+                data.reduce(
+                  (acc, curr) => acc + (curr.income - curr.expense),
+                  0
+                ) / 1000
+              ).toFixed(1)}
+              M
+            </span>
+          </div>
+        </div>
       </CardContent>
     </Card>
   );

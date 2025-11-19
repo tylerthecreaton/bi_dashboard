@@ -5,158 +5,138 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { useEffect, useRef } from "react";
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+  Cell,
+} from "recharts";
+
+const data = [
+  { name: "Banking", value: 2800, color: "#3b82f6" },
+  { name: "Manufacturing", value: 2200, color: "#10b981" },
+  { name: "Retail", value: 1900, color: "#f59e0b" },
+  { name: "Healthcare", value: 1600, color: "#ef4444" },
+  { name: "Finance", value: 2400, color: "#8b5cf6" },
+  { name: "Technology", value: 3100, color: "#06b6d4" },
+];
 
 export function GrossProfitByVerticalChart() {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-
-  useEffect(() => {
-    if (!canvasRef.current) return;
-
-    const canvas = canvasRef.current;
-    const ctx = canvas.getContext("2d");
-    if (!ctx) return;
-
-    // Set canvas size
-    canvas.width = canvas.offsetWidth;
-    canvas.height = 300;
-
-    // Sample data - Gross Profit by vertical
-    const verticals = ["Banking", "Manufacturing", "Retail", "Healthcare", "Finance", "Technology"];
-    const grossProfit = [2800, 2200, 1900, 1600, 2400, 3100];
-    const colors = [
-      "#3b82f6", "#10b981", "#f59e0b", "#ef4444", "#8b5cf6", "#06b6d4"
-    ];
-
-    const width = canvas.width;
-    const height = canvas.height;
-    const padding = 40;
-    const maxValue = Math.max(...grossProfit);
-
-    // Calculate chart area
-    const chartWidth = width - padding * 2;
-    const chartHeight = height - padding * 2;
-
-    // Bar settings
-    const barWidth = chartWidth / verticals.length / 1.5;
-    const barSpacing = chartWidth / verticals.length / 3;
-
-    // Draw background
-    ctx.fillStyle = "#ffffff";
-    ctx.fillRect(0, 0, width, height);
-
-    // Draw grid lines
-    ctx.strokeStyle = "#f3f4f6";
-    ctx.lineWidth = 1;
-    for (let i = 0; i <= 5; i++) {
-      const y = padding + (chartHeight / 5) * i;
-      ctx.beginPath();
-      ctx.moveTo(padding, y);
-      ctx.lineTo(width - padding, y);
-      ctx.stroke();
-    }
-
-    // Draw Y-axis labels
-    ctx.fillStyle = "#9ca3af";
-    ctx.font = "12px sans-serif";
-    ctx.textAlign = "right";
-    for (let i = 0; i <= 5; i++) {
-      const value = Math.round((maxValue / 5) * (5 - i));
-      const y = padding + (chartHeight / 5) * i + 4;
-      ctx.fillText(`$${value}K`, padding - 10, y);
-    }
-
-    // Draw bars
-    verticals.forEach((vertical, index) => {
-      const barHeight = (grossProfit[index] / maxValue) * chartHeight;
-      const x = padding + (barWidth + barSpacing) * index + barSpacing / 2;
-      const y = height - padding - barHeight;
-      
-      // Draw bar with gradient effect
-      const gradient = ctx.createLinearGradient(0, y, 0, height - padding);
-      gradient.addColorStop(0, colors[index]);
-      gradient.addColorStop(1, colors[index] + "80");
-      
-      ctx.fillStyle = gradient;
-      ctx.fillRect(x, y, barWidth, barHeight);
-      
-      // Draw value on top of bar
-      ctx.fillStyle = "#1f2937";
-      ctx.font = "bold 12px sans-serif";
-      ctx.textAlign = "center";
-      ctx.fillText(`$${grossProfit[index]}K`, x + barWidth / 2, y - 5);
-      
-      // Draw vertical label
-      ctx.fillStyle = "#9ca3af";
-      ctx.font = "11px sans-serif";
-      ctx.save();
-      ctx.translate(x + barWidth / 2, height - 10);
-      ctx.rotate(-Math.PI / 6);
-      ctx.textAlign = "right";
-      ctx.fillText(vertical, 0, 0);
-      ctx.restore();
-    });
-
-    // Draw average line
-    const average = grossProfit.reduce((sum, val) => sum + val, 0) / grossProfit.length;
-    const averageY = height - padding - (average / maxValue) * chartHeight;
-    
-    ctx.strokeStyle = "#ef4444";
-    ctx.lineWidth = 2;
-    ctx.setLineDash([5, 5]);
-    ctx.beginPath();
-    ctx.moveTo(padding, averageY);
-    ctx.lineTo(width - padding, averageY);
-    ctx.stroke();
-    ctx.setLineDash([]);
-    
-    // Draw average label
-    ctx.fillStyle = "#ef4444";
-    ctx.font = "11px sans-serif";
-    ctx.textAlign = "left";
-    ctx.fillText(`Avg: $${Math.round(average)}K`, width - padding + 10, averageY + 4);
-
-    // Draw title
-    ctx.fillStyle = "#1f2937";
-    ctx.font = "bold 14px sans-serif";
-    ctx.textAlign = "center";
-    ctx.fillText("Gross Profit by Vertical", width / 2, 25);
-
-    // Draw summary stats
-    const totalProfit = grossProfit.reduce((sum, val) => sum + val, 0);
-    const maxProfit = Math.max(...grossProfit);
-    const minProfit = Math.min(...grossProfit);
-    const maxIndex = grossProfit.indexOf(maxProfit);
-    const minIndex = grossProfit.indexOf(minProfit);
-    
-    ctx.fillStyle = "#6b7280";
-    ctx.font = "11px sans-serif";
-    ctx.textAlign = "left";
-    ctx.fillText(`Total: $${totalProfit}K`, padding, height - 5);
-    ctx.fillText(`Highest: ${verticals[maxIndex]} ($${maxProfit}K)`, padding + 120, height - 5);
-    ctx.fillText(`Lowest: ${verticals[minIndex]} ($${minProfit}K)`, padding + 280, height - 5);
-  }, []);
+  const totalProfit = data.reduce((sum, item) => sum + item.value, 0);
+  const maxProfitItem = data.reduce((prev, current) =>
+    prev.value > current.value ? prev : current
+  );
 
   return (
-    <Card className="col-span-full lg:col-span-2 border-gray-200 bg-white">
+    <Card className="col-span-full lg:col-span-2 border-gray-200 bg-white shadow-sm">
       <CardHeader>
         <div className="flex items-center justify-between">
           <div>
-            <CardTitle className="text-gray-900">Gross Profit by Vertical</CardTitle>
-            <CardDescription className="text-gray-500">
+            <CardTitle className="text-gray-900 text-lg font-semibold">
+              Gross Profit by Vertical
+            </CardTitle>
+            <CardDescription className="text-gray-500 text-sm">
               Gross profit breakdown by industry vertical
             </CardDescription>
-            <p className="text-xs text-green-600 font-semibold mt-1">
-              Technology leads with $3.1M profit
+            <p className="text-xs text-emerald-600 font-medium mt-2 flex items-center gap-1">
+              <span className="inline-block w-2 h-2 rounded-full bg-emerald-500"></span>
+              {maxProfitItem.name} leads with $
+              {(maxProfitItem.value / 1000).toFixed(1)}M profit
             </p>
           </div>
-          <button className="px-3 py-1 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50">
-            Current
+          <button className="px-3 py-1.5 text-xs font-medium text-gray-600 bg-gray-50 border border-gray-200 rounded-lg hover:bg-gray-100 transition-colors cursor-pointer">
+            Current Year
           </button>
         </div>
       </CardHeader>
       <CardContent>
-        <canvas ref={canvasRef} className="w-full" />
+        <div className="h-[300px] w-full">
+          <ResponsiveContainer width="100%" height="100%">
+            <BarChart
+              data={data}
+              margin={{
+                top: 20,
+                right: 30,
+                left: 20,
+                bottom: 5,
+              }}
+            >
+              <CartesianGrid
+                strokeDasharray="3 3"
+                vertical={false}
+                stroke="#f3f4f6"
+              />
+              <XAxis
+                dataKey="name"
+                axisLine={false}
+                tickLine={false}
+                tick={{ fill: "#6b7280", fontSize: 12 }}
+                dy={10}
+              />
+              <YAxis
+                axisLine={false}
+                tickLine={false}
+                tick={{ fill: "#6b7280", fontSize: 12 }}
+                tickFormatter={(value) => `$${value}K`}
+              />
+              <Tooltip
+                cursor={{ fill: "#f9fafb" }}
+                content={({ active, payload }) => {
+                  if (active && payload && payload.length) {
+                    const data = payload[0].payload;
+                    return (
+                      <div className="bg-white p-3 border border-gray-100 shadow-lg rounded-xl">
+                        <div className="flex items-center gap-2 mb-1">
+                          <div
+                            className="w-2 h-2 rounded-full"
+                            style={{ backgroundColor: data.color }}
+                          />
+                          <p className="text-sm font-semibold text-gray-900">
+                            {data.name}
+                          </p>
+                        </div>
+                        <p className="text-sm text-gray-600 pl-4">
+                          Profit:{" "}
+                          <span className="font-medium text-gray-900">
+                            ${data.value.toLocaleString()}K
+                          </span>
+                        </p>
+                      </div>
+                    );
+                  }
+                  return null;
+                }}
+              />
+              <Bar
+                dataKey="value"
+                radius={[6, 6, 0, 0]}
+                animationDuration={1500}
+              >
+                {data.map((entry, index) => (
+                  <Cell key={`cell-${index}`} fill={entry.color} />
+                ))}
+              </Bar>
+            </BarChart>
+          </ResponsiveContainer>
+        </div>
+        <div className="mt-6 flex items-center justify-between text-sm text-gray-500 px-2 border-t border-gray-100 pt-4">
+          <div className="flex flex-col">
+            <span className="text-xs text-gray-400">Total Profit</span>
+            <span className="font-semibold text-gray-900 text-base">
+              ${(totalProfit / 1000).toFixed(1)}M
+            </span>
+          </div>
+          <div className="flex flex-col text-right">
+            <span className="text-xs text-gray-400">Highest Performing</span>
+            <span className="font-semibold text-gray-900 text-base">
+              {maxProfitItem.name}
+            </span>
+          </div>
+        </div>
       </CardContent>
     </Card>
   );

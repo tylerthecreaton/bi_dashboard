@@ -5,226 +5,199 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { useEffect, useRef } from "react";
+import {
+  ComposedChart,
+  Line,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+  Legend,
+  ReferenceLine,
+} from "recharts";
+
+const data = [
+  { name: "Q1 2024", actual: 7200, forecast: null, newProjects: 850 },
+  { name: "Q2 2024", actual: 6800, forecast: null, newProjects: 750 },
+  { name: "Q3 2024", actual: 6500, forecast: null, newProjects: 700 },
+  { name: "Q4 2024", actual: 6200, forecast: 6200, newProjects: 650 },
+  { name: "Q1 2025", actual: null, forecast: 5800, newProjects: 600 },
+  { name: "Q2 2025", actual: null, forecast: 5500, newProjects: 550 },
+];
 
 export function ForecastBacklogChart() {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-
-  useEffect(() => {
-    if (!canvasRef.current) return;
-
-    const canvas = canvasRef.current;
-    const ctx = canvas.getContext("2d");
-    if (!ctx) return;
-
-    // Set canvas size
-    canvas.width = canvas.offsetWidth;
-    canvas.height = 300;
-
-    // Sample data - Forecast Backlog by quarter
-    const quarters = ["Q1 2024", "Q2 2024", "Q3 2024", "Q4 2024", "Q1 2025", "Q2 2025"];
-    const actualBacklog = [7200, 6800, 6500, 6200, null, null];
-    const forecastBacklog = [null, null, null, 6200, 5800, 5500];
-    const newProjects = [850, 750, 700, 650, 600, 550];
-
-    const width = canvas.width;
-    const height = canvas.height;
-    const padding = 40;
-    const maxValue = Math.max(...actualBacklog.filter((v): v is number => v !== null), ...forecastBacklog.filter((v): v is number => v !== null));
-    const minValue = 0;
-
-    // Calculate chart area
-    const chartWidth = width - padding * 2;
-    const chartHeight = height - padding * 2;
-
-    // Draw background
-    ctx.fillStyle = "#ffffff";
-    ctx.fillRect(0, 0, width, height);
-
-    // Draw grid lines
-    ctx.strokeStyle = "#f3f4f6";
-    ctx.lineWidth = 1;
-    for (let i = 0; i <= 5; i++) {
-      const y = padding + (chartHeight / 5) * i;
-      ctx.beginPath();
-      ctx.moveTo(padding, y);
-      ctx.lineTo(width - padding, y);
-      ctx.stroke();
-    }
-
-    // Draw Y-axis labels
-    ctx.fillStyle = "#9ca3af";
-    ctx.font = "12px sans-serif";
-    ctx.textAlign = "right";
-    for (let i = 0; i <= 5; i++) {
-      const value = Math.round((maxValue / 5) * (5 - i));
-      const y = padding + (chartHeight / 5) * i + 4;
-      ctx.fillText(`$${value}K`, padding - 10, y);
-    }
-
-    // Draw forecast area (lighter shade)
-    ctx.fillStyle = "rgba(156, 163, 175, 0.1)";
-    ctx.beginPath();
-    ctx.moveTo(padding + (chartWidth / (forecastBacklog.length - 1)) * 3, height - padding);
-
-    for (let i = 3; i < forecastBacklog.length; i++) {
-      const x = padding + (chartWidth / (forecastBacklog.length - 1)) * i;
-      const y = height - padding - (((forecastBacklog[i] || 0) - minValue) / (maxValue - minValue)) * chartHeight;
-      if (i === 3) {
-        ctx.lineTo(x, y);
-      } else {
-        ctx.lineTo(x, y);
-      }
-    }
-    ctx.lineTo(width - padding, height - padding);
-    ctx.closePath();
-    ctx.fill();
-
-    // Draw actual backlog line
-    ctx.strokeStyle = "#3b82f6";
-    ctx.lineWidth = 3;
-    ctx.beginPath();
-
-    for (let i = 0; i < actualBacklog.length; i++) {
-      if (actualBacklog[i] === null) continue;
-      const x = padding + (chartWidth / (actualBacklog.length - 1)) * i;
-      const y = height - padding - (((actualBacklog[i] || 0) - minValue) / (maxValue - minValue)) * chartHeight;
-      if (i === 0) {
-        ctx.moveTo(x, y);
-      } else {
-        ctx.lineTo(x, y);
-      }
-    }
-    ctx.stroke();
-
-    // Draw forecast backlog line (dashed)
-    ctx.strokeStyle = "#9ca3af";
-    ctx.lineWidth = 2;
-    ctx.setLineDash([5, 5]);
-    ctx.beginPath();
-
-    for (let i = 3; i < forecastBacklog.length; i++) {
-      const x = padding + (chartWidth / (forecastBacklog.length - 1)) * i;
-      const y = height - padding - ((forecastBacklog[i] - minValue) / (maxValue - minValue)) * chartHeight;
-      if (i === 3) {
-        ctx.moveTo(x, y);
-      } else {
-        ctx.lineTo(x, y);
-      }
-    }
-    ctx.stroke();
-    ctx.setLineDash([]);
-
-    // Draw new projects bars
-    const barWidth = chartWidth / (newProjects.length * 2);
-    newProjects.forEach((value, index) => {
-      if (value === null) return;
-      const barHeight = (value / maxValue) * chartHeight * 0.3; // Scale down to not overlap
-      const x = padding + (chartWidth / (newProjects.length - 1)) * index - barWidth / 2;
-      const y = height - padding - barHeight;
-      
-      ctx.fillStyle = "rgba(16, 185, 129, 0.7)";
-      ctx.fillRect(x, y, barWidth, barHeight);
-    });
-
-    // Draw dots for actual backlog
-    ctx.fillStyle = "#3b82f6";
-    for (let i = 0; i < actualBacklog.length; i++) {
-      if (actualBacklog[i] === null) continue;
-      const x = padding + (chartWidth / (actualBacklog.length - 1)) * i;
-      const y = height - padding - (((actualBacklog[i] || 0) - minValue) / (maxValue - minValue)) * chartHeight;
-      ctx.beginPath();
-      ctx.arc(x, y, 4, 0, Math.PI * 2);
-      ctx.fill();
-    }
-
-    // Draw dots for forecast backlog
-    ctx.fillStyle = "#9ca3af";
-    for (let i = 3; i < forecastBacklog.length; i++) {
-      const x = padding + (chartWidth / (forecastBacklog.length - 1)) * i;
-      const y = height - padding - (((forecastBacklog[i] || 0) - minValue) / (maxValue - minValue)) * chartHeight;
-      ctx.beginPath();
-      ctx.arc(x, y, 3, 0, Math.PI * 2);
-      ctx.fill();
-    }
-
-    // Draw X-axis labels
-    ctx.fillStyle = "#9ca3af";
-    ctx.font = "11px sans-serif";
-    ctx.textAlign = "center";
-    for (let i = 0; i < quarters.length; i++) {
-      const x = padding + (chartWidth / (quarters.length - 1)) * i;
-      ctx.fillText(quarters[i], x, height - 15);
-    }
-
-    // Draw forecast separator line
-    const separatorX = padding + (chartWidth / (quarters.length - 1)) * 3.5;
-    ctx.strokeStyle = "#ef4444";
-    ctx.lineWidth = 2;
-    ctx.setLineDash([5, 5]);
-    ctx.beginPath();
-    ctx.moveTo(separatorX, padding);
-    ctx.lineTo(separatorX, height - padding);
-    ctx.stroke();
-    ctx.setLineDash([]);
-
-    // Draw forecast label
-    ctx.fillStyle = "#ef4444";
-    ctx.font = "bold 11px sans-serif";
-    ctx.textAlign = "center";
-    ctx.fillText("FORECAST", separatorX + 50, padding + 15);
-
-    // Draw legend
-    const legendY = 20;
-    
-    // Actual backlog legend
-    ctx.fillStyle = "#3b82f6";
-    ctx.fillRect(width - 150, legendY, 15, 15);
-    ctx.fillStyle = "#374151";
-    ctx.font = "12px sans-serif";
-    ctx.textAlign = "left";
-    ctx.fillText("Actual Backlog", width - 130, legendY + 12);
-
-    // Forecast backlog legend
-    ctx.fillStyle = "#9ca3af";
-    ctx.fillRect(width - 150, legendY + 25, 15, 15);
-    ctx.fillStyle = "#374151";
-    ctx.fillText("Forecast Backlog", width - 130, legendY + 37);
-
-    // New projects legend
-    ctx.fillStyle = "rgba(16, 185, 129, 0.7)";
-    ctx.fillRect(width - 150, legendY + 50, 15, 15);
-    ctx.fillStyle = "#374151";
-    ctx.fillText("New Projects", width - 130, legendY + 62);
-
-    // Draw current and forecast values
-    ctx.fillStyle = "#1f2937";
-    ctx.font = "bold 12px sans-serif";
-    ctx.textAlign = "left";
-    ctx.fillText(`Current: $${actualBacklog[3]}K`, padding, padding - 10);
-    ctx.fillText(`Q2 2025: $${forecastBacklog[5]}K`, padding + 120, padding - 10);
-  }, []);
+  const currentBacklog = data[3].actual; // Q4 2024
+  const forecastEnd = data[5].forecast; // Q2 2025
+  const reduction =
+    currentBacklog && forecastEnd
+      ? ((currentBacklog - forecastEnd) / currentBacklog) * 100
+      : 0;
 
   return (
-    <Card className="col-span-full lg:col-span-2 border-gray-200 bg-white">
+    <Card className="col-span-full lg:col-span-2 border-gray-200 bg-white shadow-sm">
       <CardHeader>
         <div className="flex items-center justify-between">
           <div>
-            <CardTitle className="text-gray-900">Forecast Backlog Analysis</CardTitle>
-            <CardDescription className="text-gray-500">
+            <CardTitle className="text-gray-900 text-lg font-semibold">
+              Forecast Backlog Analysis
+            </CardTitle>
+            <CardDescription className="text-gray-500 text-sm">
               Actual and forecast backlog trends with new projects
             </CardDescription>
-            <p className="text-xs text-green-600 font-semibold mt-1">
-              Expected reduction: -11.3% by Q2 2025
+            <p className="text-xs text-emerald-600 font-medium mt-2 flex items-center gap-1">
+              <span className="inline-block w-2 h-2 rounded-full bg-emerald-500"></span>
+              Expected reduction: -{reduction.toFixed(1)}% by Q2 2025
             </p>
           </div>
-          <button className="px-3 py-1 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50">
+          <button className="px-3 py-1.5 text-xs font-medium text-gray-600 bg-gray-50 border border-gray-200 rounded-lg hover:bg-gray-100 transition-colors cursor-pointer">
             Quarterly
           </button>
         </div>
       </CardHeader>
       <CardContent>
-        <canvas ref={canvasRef} className="w-full" />
+        <div className="h-[300px] w-full">
+          <ResponsiveContainer width="100%" height="100%">
+            <ComposedChart
+              data={data}
+              margin={{
+                top: 20,
+                right: 30,
+                left: 20,
+                bottom: 5,
+              }}
+            >
+              <CartesianGrid
+                strokeDasharray="3 3"
+                vertical={false}
+                stroke="#f3f4f6"
+              />
+              <XAxis
+                dataKey="name"
+                axisLine={false}
+                tickLine={false}
+                tick={{ fill: "#6b7280", fontSize: 12 }}
+                dy={10}
+              />
+              <YAxis
+                yAxisId="left"
+                axisLine={false}
+                tickLine={false}
+                tick={{ fill: "#6b7280", fontSize: 12 }}
+                tickFormatter={(value) => `$${value / 1000}K`}
+              />
+              <YAxis
+                yAxisId="right"
+                orientation="right"
+                axisLine={false}
+                tickLine={false}
+                tick={{ fill: "#6b7280", fontSize: 12 }}
+                domain={[0, 3000]} // Scale new projects to be smaller bars
+                hide={true}
+              />
+              <Tooltip
+                cursor={{ fill: "#f9fafb" }}
+                content={({ active, payload, label }) => {
+                  if (active && payload && payload.length) {
+                    return (
+                      <div className="bg-white p-3 border border-gray-100 shadow-lg rounded-xl">
+                        <p className="text-sm font-semibold text-gray-900 mb-2">
+                          {label}
+                        </p>
+                        {payload.map((entry, index) => (
+                          <div
+                            key={index}
+                            className="flex items-center gap-2 mb-1"
+                          >
+                            <div
+                              className="w-2 h-2 rounded-full"
+                              style={{ backgroundColor: entry.color }}
+                            />
+                            <span className="text-xs text-gray-500">
+                              {entry.name}:
+                            </span>
+                            <span className="text-sm font-medium text-gray-900">
+                              {entry.value
+                                ? `$${entry.value.toLocaleString()}`
+                                : "N/A"}
+                            </span>
+                          </div>
+                        ))}
+                      </div>
+                    );
+                  }
+                  return null;
+                }}
+              />
+              <Legend
+                verticalAlign="top"
+                height={36}
+                iconType="circle"
+                formatter={(value) => (
+                  <span className="text-sm text-gray-600 font-medium ml-1">
+                    {value}
+                  </span>
+                )}
+              />
+              <ReferenceLine
+                x="Q4 2024"
+                stroke="#ef4444"
+                strokeDasharray="3 3"
+                label={{
+                  value: "Forecast",
+                  position: "top",
+                  fill: "#ef4444",
+                  fontSize: 10,
+                }}
+              />
+              <Bar
+                yAxisId="right"
+                dataKey="newProjects"
+                name="New Projects"
+                fill="rgba(16, 185, 129, 0.7)"
+                radius={[4, 4, 0, 0]}
+                barSize={30}
+              />
+              <Line
+                yAxisId="left"
+                type="monotone"
+                dataKey="actual"
+                name="Actual Backlog"
+                stroke="#3b82f6"
+                strokeWidth={3}
+                dot={{ r: 4, fill: "#3b82f6", strokeWidth: 0 }}
+                activeDot={{ r: 6 }}
+                connectNulls
+              />
+              <Line
+                yAxisId="left"
+                type="monotone"
+                dataKey="forecast"
+                name="Forecast Backlog"
+                stroke="#9ca3af"
+                strokeWidth={3}
+                strokeDasharray="5 5"
+                dot={{ r: 4, fill: "#9ca3af", strokeWidth: 0 }}
+                activeDot={{ r: 6 }}
+              />
+            </ComposedChart>
+          </ResponsiveContainer>
+        </div>
+        <div className="mt-6 flex items-center justify-between text-sm text-gray-500 px-2 border-t border-gray-100 pt-4">
+          <div className="flex flex-col">
+            <span className="text-xs text-gray-400">Current Backlog</span>
+            <span className="font-semibold text-gray-900 text-base">
+              ${currentBacklog?.toLocaleString()}
+            </span>
+          </div>
+          <div className="flex flex-col text-right">
+            <span className="text-xs text-gray-400">Forecast (Q2 2025)</span>
+            <span className="font-semibold text-gray-900 text-base">
+              ${forecastEnd?.toLocaleString()}
+            </span>
+          </div>
+        </div>
       </CardContent>
     </Card>
   );
