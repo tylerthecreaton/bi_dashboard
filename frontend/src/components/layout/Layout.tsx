@@ -12,6 +12,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { removeToken } from "@/lib/auth";
 import { toast } from "sonner";
+import { NotificationList } from "@/components/notifications/NotificationList";
 import type { ReactNode } from "react";
 
 interface LayoutProps {
@@ -153,12 +154,7 @@ export function Layout({ children }: LayoutProps) {
           </button>
 
           <div className="flex items-center gap-3">
-            <button className="relative p-1.5 hover:bg-gray-100 rounded-md transition-all duration-200">
-              <div className="w-5 h-5 bg-gray-100 rounded flex items-center justify-center">
-                <span className="text-xs text-gray-600">🔔</span>
-              </div>
-              <span className="absolute top-0.5 right-0.5 w-2 h-2 bg-red-500 rounded-full"></span>
-            </button>
+            <NotificationList />
 
             <div className="flex items-center gap-2 pl-3 border-l border-gray-200">
               <div className="text-right">
