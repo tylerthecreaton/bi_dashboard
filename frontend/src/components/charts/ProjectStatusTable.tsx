@@ -2,6 +2,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Filter, Download, Eye } from "lucide-react";
+import { useState } from "react";
+import { ProjectDetailModal } from "./ProjectDetailModal";
 
 interface Project {
   id: string;
@@ -117,6 +119,18 @@ const getProgressColor = (progress: number) => {
 };
 
 export function ProjectStatusTable() {
+  const [selectedProject, setSelectedProject] = useState<Project | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const handleViewProject = (project: Project) => {
+    setSelectedProject(project);
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+  };
+
   return (
     <Card className="col-span-full border-gray-200 bg-white">
       <CardHeader className="flex flex-row items-center justify-between">
@@ -233,6 +247,7 @@ export function ProjectStatusTable() {
                       variant="ghost"
                       size="sm"
                       className="gap-1 text-gray-600 hover:text-gray-900"
+                      onClick={() => handleViewProject(project)}
                     >
                       <Eye className="w-4 h-4" />
                       ดู
@@ -266,6 +281,12 @@ export function ProjectStatusTable() {
           </div>
         </div>
       </CardContent>
+      
+      <ProjectDetailModal
+        project={selectedProject}
+        isOpen={isModalOpen}
+        onClose={handleCloseModal}
+      />
     </Card>
   );
 }
