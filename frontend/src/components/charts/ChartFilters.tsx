@@ -25,28 +25,29 @@ export interface FilterState {
     start: string;
     end: string;
   };
+  operations: string[];
 }
 
 const BUSINESS_TYPES = [
-  { id: "project", label: "Project" },
-  { id: "services", label: "Services" },
-  { id: "distribute", label: "Distribute" }
+  { id: "project", label: "โปรเจค" },
+  { id: "services", label: "บริการ" },
+  { id: "distribute", label: "จัดจำหน่าย" }
 ];
 
 const VERTICALS = [
-  { id: "banking", label: "Banking" },
-  { id: "manufacturing", label: "Manufacturing" },
-  { id: "retail", label: "Retail" },
-  { id: "healthcare", label: "Healthcare" },
-  { id: "finance", label: "Finance" },
-  { id: "technology", label: "Technology" }
+  { id: "banking", label: "ธนาคาร" },
+  { id: "manufacturing", label: "การผลิต" },
+  { id: "retail", label: "ค้าปลีก" },
+  { id: "healthcare", label: "การแพทย์และสุขภาพ" },
+  { id: "finance", label: "การเงิน" },
+  { id: "technology", label: "เทคโนโลยี" }
 ];
 
 const QUARTERS = [
-  { id: "Q1", label: "Q1 (Jan-Mar)" },
-  { id: "Q2", label: "Q2 (Apr-Jun)" },
-  { id: "Q3", label: "Q3 (Jul-Sep)" },
-  { id: "Q4", label: "Q4 (Oct-Dec)" }
+  { id: "Q1", label: "ไตรมาส 1 (ม.ค.-มี.ค.)" },
+  { id: "Q2", label: "ไตรมาส 2 (เม.ย.-มิ.ย.)" },
+  { id: "Q3", label: "ไตรมาส 3 (ก.ค.-ก.ย.)" },
+  { id: "Q4", label: "ไตรมาส 4 (ต.ค.-ธ.ค.)" }
 ];
 
 const YEARS = [
@@ -55,6 +56,15 @@ const YEARS = [
   { id: "2022", label: "2022" },
   { id: "2021", label: "2021" },
   { id: "2020", label: "2020" }
+];
+
+const OPERATIONS = [
+  { id: "infrastructure", label: "โครงสร้างพื้นฐาน" },
+  { id: "software", label: "ซอฟต์แวร์" },
+  { id: "qa", label: "คุณภาพ (QA)" },
+  { id: "devops", label: "DevOps" },
+  { id: "security", label: "ความปลอดภัย" },
+  { id: "analytics", label: "วิเคราะห์ข้อมูล" }
 ];
 
 export function ChartFilters({ onFiltersChange, className }: ChartFiltersProps) {
@@ -66,7 +76,8 @@ export function ChartFilters({ onFiltersChange, className }: ChartFiltersProps) 
     dateRange: {
       start: "2024-01-01",
       end: "2024-12-31"
-    }
+    },
+    operations: []
   });
 
   const [isExpanded, setIsExpanded] = React.useState(false);
@@ -119,6 +130,16 @@ export function ChartFilters({ onFiltersChange, className }: ChartFiltersProps) 
     onFiltersChange?.(newFilters);
   };
 
+  const handleOperationChange = (operation: string, checked: boolean) => {
+    const newOperations = checked
+      ? [...filters.operations, operation]
+      : filters.operations.filter(op => op !== operation);
+    
+    const newFilters = { ...filters, operations: newOperations };
+    setFilters(newFilters);
+    onFiltersChange?.(newFilters);
+  };
+
   const resetFilters = () => {
     const defaultFilters: FilterState = {
       businessTypes: ["project", "services", "distribute"],
@@ -128,7 +149,8 @@ export function ChartFilters({ onFiltersChange, className }: ChartFiltersProps) 
       dateRange: {
         start: "2024-01-01",
         end: "2024-12-31"
-      }
+      },
+      operations: []
     };
     setFilters(defaultFilters);
     onFiltersChange?.(defaultFilters);
@@ -138,6 +160,7 @@ export function ChartFilters({ onFiltersChange, className }: ChartFiltersProps) 
     let count = 0;
     if (filters.verticals.length > 0) count++;
     if (filters.quarters.length > 0) count++;
+    if (filters.operations.length > 0) count++;
     if (filters.dateRange.start !== "2024-01-01" || filters.dateRange.end !== "2024-12-31") count++;
     return count;
   };
@@ -146,7 +169,7 @@ export function ChartFilters({ onFiltersChange, className }: ChartFiltersProps) 
     <Card className={`${className} border-gray-200 bg-white`}>
       <CardHeader className="pb-3">
         <div className="flex items-center justify-between">
-          <CardTitle className="text-gray-900 text-lg">Chart Filters</CardTitle>
+          <CardTitle className="text-gray-900 text-lg">ตัวกรองกราฟ</CardTitle>
           <div className="flex items-center gap-2">
             <Button
               variant="outline"
@@ -155,7 +178,7 @@ export function ChartFilters({ onFiltersChange, className }: ChartFiltersProps) 
               className="gap-2 border-gray-300 text-gray-700 hover:bg-gray-50"
             >
               <RotateCcw className="w-4 h-4" />
-              Reset
+              รีเซ็ต
             </Button>
             <Button
               variant="outline"
@@ -164,6 +187,7 @@ export function ChartFilters({ onFiltersChange, className }: ChartFiltersProps) 
               className="gap-2 border-gray-300 text-gray-700 hover:bg-gray-50"
             >
               <Filter className="w-4 h-4" />
+              ตัวกรอง
               {getActiveFiltersCount() > 0 && (
                 <span className="bg-blue-600 text-white text-xs rounded-full px-2 py-0.5">
                   {getActiveFiltersCount()}
@@ -176,10 +200,10 @@ export function ChartFilters({ onFiltersChange, className }: ChartFiltersProps) 
       
       {isExpanded && (
         <CardContent className="pt-0">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {/* Business Types */}
             <div>
-              <h4 className="font-medium text-gray-900 mb-3">Business Type</h4>
+              <h4 className="font-medium text-gray-900 mb-3">ประเภทธุรกิจ</h4>
               <div className="space-y-2">
                 {BUSINESS_TYPES.map((type) => (
                   <div key={type.id} className="flex items-center space-x-2">
@@ -203,7 +227,7 @@ export function ChartFilters({ onFiltersChange, className }: ChartFiltersProps) 
 
             {/* Verticals */}
             <div>
-              <h4 className="font-medium text-gray-900 mb-3">Industry Vertical</h4>
+              <h4 className="font-medium text-gray-900 mb-3">กลุ่มอุตสาหกรรม</h4>
               <div className="space-y-2 max-h-40 overflow-y-auto">
                 {VERTICALS.map((vertical) => (
                   <div key={vertical.id} className="flex items-center space-x-2">
@@ -225,18 +249,42 @@ export function ChartFilters({ onFiltersChange, className }: ChartFiltersProps) 
               </div>
             </div>
 
+            {/* Operations */}
+            <div>
+              <h4 className="font-medium text-gray-900 mb-3">ฝ่ายปฏิบัติการ</h4>
+              <div className="space-y-2 max-h-40 overflow-y-auto">
+                {OPERATIONS.map((operation) => (
+                  <div key={operation.id} className="flex items-center space-x-2">
+                    <Checkbox
+                      id={`operation-${operation.id}`}
+                      checked={filters.operations.includes(operation.id)}
+                      onCheckedChange={(checked) =>
+                        handleOperationChange(operation.id, checked as boolean)
+                      }
+                    />
+                    <label
+                      htmlFor={`operation-${operation.id}`}
+                      className="text-sm font-medium text-gray-700 cursor-pointer"
+                    >
+                      {operation.label}
+                    </label>
+                  </div>
+                ))}
+              </div>
+            </div>
+
             {/* Time Period */}
             <div>
-              <h4 className="font-medium text-gray-900 mb-3">Time Period</h4>
+              <h4 className="font-medium text-gray-900 mb-3">ช่วงเวลา</h4>
               
               {/* Year Selection */}
               <div className="mb-4">
                 <label className="text-sm font-medium text-gray-700 mb-2 block">
-                  Year
+                  ปี
                 </label>
                 <Select value={filters.years[0]} onValueChange={handleYearChange}>
                   <SelectTrigger className="w-full">
-                    <SelectValue placeholder="Select year" />
+                    <SelectValue placeholder="เลือกปี" />
                   </SelectTrigger>
                   <SelectContent>
                     {YEARS.map((year) => (
@@ -251,7 +299,7 @@ export function ChartFilters({ onFiltersChange, className }: ChartFiltersProps) 
               {/* Quarter Selection */}
               <div className="mb-4">
                 <label className="text-sm font-medium text-gray-700 mb-2 block">
-                  Quarters
+                  ไตรมาส
                 </label>
                 <div className="space-y-2">
                   {QUARTERS.map((quarter) => (
@@ -277,11 +325,11 @@ export function ChartFilters({ onFiltersChange, className }: ChartFiltersProps) 
               {/* Date Range */}
               <div>
                 <label className="text-sm font-medium text-gray-700 mb-2 block">
-                  Custom Date Range
+                  ช่วงวันที่กำหนดเอง
                 </label>
                 <div className="space-y-2">
                   <div>
-                    <label className="text-xs text-gray-600">Start Date</label>
+                    <label className="text-xs text-gray-600">วันที่เริ่มต้น</label>
                     <input
                       type="date"
                       value={filters.dateRange.start}
@@ -290,7 +338,7 @@ export function ChartFilters({ onFiltersChange, className }: ChartFiltersProps) 
                     />
                   </div>
                   <div>
-                    <label className="text-xs text-gray-600">End Date</label>
+                    <label className="text-xs text-gray-600">วันที่สิ้นสุด</label>
                     <input
                       type="date"
                       value={filters.dateRange.end}

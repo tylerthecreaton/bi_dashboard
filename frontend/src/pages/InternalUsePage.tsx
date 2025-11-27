@@ -18,13 +18,18 @@ import { motion } from "motion/react";
 
 export function InternalUsePage() {
   const handleExport = () => {
-    toast.success("Export data successfully");
+    toast.success("ส่งออกข้อมูลสำเร็จ");
   };
 
   const handleFiltersChange = (filters: FilterState) => {
     console.log("Filters changed:", filters);
     // Here you would typically apply filters to your data
     // and trigger a re-render of the charts
+    
+    // แสดงข้อความเมื่อมีการเปลี่ยนแปลงตัวกรอง
+    if (filters.operations.length > 0 || filters.verticals.length > 0 || filters.businessTypes.length > 0) {
+      toast.info(`ใช้ตัวกรอง: ${filters.operations.length + filters.verticals.length + filters.businessTypes.length} รายการ`);
+    }
   };
 
   const container = {
@@ -47,11 +52,11 @@ export function InternalUsePage() {
       <div className="min-h-screen bg-muted/40">
         <DashboardHeader
           onExport={handleExport}
-          title="Internal Use Dashboard"
+          title="แดชบอร์ดสำหรับใช้ภายใน"
         />
 
         <motion.main
-          className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8"
+          className="max-w mx-auto px-4 sm:px-6 lg:px-8 py-8"
           variants={container}
           initial="hidden"
           animate="show"
@@ -68,7 +73,7 @@ export function InternalUsePage() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
             <motion.div variants={item}>
               <StatCard
-                title="Active Projects"
+                title="โปรเจคที่กำลังดำเนินการ"
                 value="24"
                 change={3}
                 trend="up"
@@ -77,8 +82,8 @@ export function InternalUsePage() {
             </motion.div>
             <motion.div variants={item}>
               <StatCard
-                title="Gross Profit"
-                value="$4.2M"
+                title="กำไรขั้นต้น"
+                value="4.2M บาท"
                 change={5.7}
                 trend="up"
                 icon={<DollarSign className="w-6 h-6 text-green-600" />}
@@ -86,7 +91,7 @@ export function InternalUsePage() {
             </motion.div>
             <motion.div variants={item}>
               <StatCard
-                title="Engineering Progress"
+                title="ความคืบหน้างานวิศวกรรม"
                 value="68%"
                 change={2.1}
                 trend="up"
@@ -95,8 +100,8 @@ export function InternalUsePage() {
             </motion.div>
             <motion.div variants={item}>
               <StatCard
-                title="Forecast Backlog"
-                value="$8.5M"
+                title="งานค้างดำเนินการที่คาดการณ์"
+                value="8.5M บาท"
                 change={-1.2}
                 trend="down"
                 icon={<TrendingUp className="w-6 h-6 text-red-600" />}
@@ -107,10 +112,11 @@ export function InternalUsePage() {
           {/* Charts Section */}
           <motion.div variants={item}>
             <Tabs defaultValue="projects" className="space-y-6">
-              <TabsList className="grid w-full grid-cols-3">
-                <TabsTrigger value="projects">Projects</TabsTrigger>
-                <TabsTrigger value="financial">Financial</TabsTrigger>
-                <TabsTrigger value="progress">Progress</TabsTrigger>
+              <TabsList className="grid w-full grid-cols-4">
+                <TabsTrigger value="projects">สถานะโปรเจค</TabsTrigger>
+                <TabsTrigger value="financial">ข้อมูลการเงิน</TabsTrigger>
+                <TabsTrigger value="progress">ความคืบหน้า</TabsTrigger>
+                <TabsTrigger value="cashflow">กระแสเงินสด</TabsTrigger>
               </TabsList>
 
               <TabsContent value="projects" className="space-y-6">
@@ -120,9 +126,6 @@ export function InternalUsePage() {
               <TabsContent value="financial" className="space-y-6">
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                   <GrossProfitByVerticalChart />
-                  <CashFlowChart />
-                </div>
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                   <ForecastBacklogChart />
                 </div>
               </TabsContent>
@@ -131,6 +134,12 @@ export function InternalUsePage() {
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                   <EngineeringProgressChart />
                   <InvoiceVsProgressChart />
+                </div>
+              </TabsContent>
+
+              <TabsContent value="cashflow" className="space-y-6">
+                <div className="grid grid-cols-1 lg:grid-cols-1 gap-6">
+                  <CashFlowChart />
                 </div>
               </TabsContent>
             </Tabs>

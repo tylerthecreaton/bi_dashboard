@@ -32,31 +32,31 @@ export function Layout({ children }: LayoutProps) {
 
   const menuItems = [
     {
-      label: "Dashboard",
+      label: "แดชบอร์ด",
       icon: BarChart3,
       href: "/dashboard",
       active: location.pathname === "/dashboard",
     },
     {
-      label: "Internal Use",
+      label: "ใช้ภายใน",
       icon: BarChart3,
       href: "/internal-use",
       active: location.pathname === "/internal-use",
     },
     {
-      label: "Home",
+      label: "หน้าแรก",
       icon: Home,
       href: "/welcome",
       active: location.pathname === "/welcome",
     },
     {
-      label: "Settings",
+      label: "การตั้งค่า",
       icon: Settings,
       href: "/settings",
       active: location.pathname === "/settings",
     },
     {
-      label: "Help & Support",
+      label: "ช่วยเหลือและสนับสนุน",
       icon: HelpCircle,
       href: "/help",
       active: location.pathname === "/help",
@@ -133,7 +133,7 @@ export function Layout({ children }: LayoutProps) {
             className="w-full gap-2 text-gray-700 hover:bg-gray-100 border-gray-300 text-sm"
           >
             <LogOut className="w-4 h-4" />
-            {sidebarOpen && <span>Logout</span>}
+            {sidebarOpen && <span>ออกจากระบบ</span>}
           </Button>
         </div>
       </div>

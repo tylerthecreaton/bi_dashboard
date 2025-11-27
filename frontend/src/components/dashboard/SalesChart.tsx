@@ -37,16 +37,18 @@ export function SalesChart() {
       <CardHeader>
         <div className="flex items-center justify-between">
           <div>
-            <CardTitle className="text-gray-900">Overall Sales</CardTitle>
+            <CardTitle className="text-gray-900">
+              รายได้รวมปีนี้เทียบกับเป้าหมาย
+            </CardTitle>
             <CardDescription className="text-gray-500">
-              $3,872.24
+              $3,872.24 / $5,000.00
             </CardDescription>
             <p className="text-xs text-green-600 font-semibold mt-1">
-              +2.26% From last month
+              77.44% ของเป้าหมายปีนี้
             </p>
           </div>
           <button className="px-3 py-1 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50">
-            Monthly
+            รายไตรมาส
           </button>
         </div>
       </CardHeader>
@@ -69,7 +71,7 @@ export function SalesChart() {
             <Tooltip
               formatter={(value: number) => [
                 `$${value.toLocaleString()}`,
-                "Sales",
+                "รายได้",
               ]}
               contentStyle={{
                 backgroundColor: "white",

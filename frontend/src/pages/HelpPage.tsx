@@ -9,28 +9,29 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Search, Mail, Book, MessageCircle, Phone } from "lucide-react";
+import { motion } from "framer-motion";
 
 export function HelpPage() {
   const faqs = [
     {
-      question: "How do I reset my password?",
+      question: "ฉันจะรีเซ็ตรหัสผ่านได้อย่างไร?",
       answer:
-        "You can reset your password by going to the Settings page and clicking on the 'Security' tab. From there, you'll see an option to change your password.",
+        "คุณสามารถรีเซ็ตรหัสผ่านได้โดยไปที่หน้าการตั้งค่าและคลิกที่แท็บ 'ความปลอดภัย' จากนั้นคุณจะเห็นตัวเลือกในการเปลี่ยนรหัสผ่าน",
     },
     {
-      question: "How do I export reports?",
+      question: "ฉันจะส่งออกรายงานได้อย่างไร?",
       answer:
-        "To export reports, navigate to the Dashboard page and look for the 'Export' button in the top right corner of the report widget.",
+        "หากต้องการส่งออกรายงาน ให้ไปที่หน้าแดชบอร์ดและมองหาปุ่ม 'ส่งออก' ที่มุมขวาบนของวิดเจ็ตรายงาน",
     },
     {
-      question: "Can I change my username?",
+      question: "ฉันสามารถเปลี่ยนชื่อผู้ใช้ได้หรือไม่?",
       answer:
-        "Currently, usernames are fixed. If you need to change your display name, please contact support.",
+        "ในปัจจุบัน ชื่อผู้ใช้ถูกกำหนดไว้คงที่ หากคุณต้องการเปลี่ยนชื่อที่แสดง โปรดติดต่อฝ่ายสนับสนุน",
     },
     {
-      question: "Where can I find the API documentation?",
+      question: "ฉันสามารถค้นหาเอกสาร API ได้ที่ไหน?",
       answer:
-        "API documentation is available in the 'Internal Use' section under the 'Resources' tab.",
+        "เอกสาร API มีให้ใช้งานในส่วน 'การใช้งานภายใน' ภายใต้แท็บ 'ทรัพยากร'",
     },
   ];
 
@@ -38,128 +39,191 @@ export function HelpPage() {
     <Layout>
       <div className="max-w-4xl mx-auto space-y-8">
         {/* Header Section */}
-        <div className="text-center space-y-4 py-8">
+        <motion.div
+          className="text-center space-y-4 py-8"
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+        >
           <h1 className="text-3xl font-bold text-gray-900">
-            How can we help you?
+            เราจะช่วยคุณอย่างไร?
           </h1>
-          <div className="relative max-w-xl mx-auto">
+          <motion.div
+            className="relative max-w-xl mx-auto"
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+          >
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
             <Input
-              placeholder="Search for help articles..."
+              placeholder="ค้นหาบทความช่วยเหลือ..."
               className="pl-10 h-12 text-lg bg-white shadow-sm"
             />
-          </div>
-        </div>
+          </motion.div>
+        </motion.div>
 
         {/* Quick Links */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm hover:shadow-md transition-shadow text-center space-y-4">
+          <motion.div
+            className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm hover:shadow-md transition-shadow text-center space-y-4"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.3 }}
+            whileHover={{ y: -5 }}
+          >
             <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mx-auto">
               <Book className="w-6 h-6 text-blue-600" />
             </div>
-            <h3 className="font-semibold text-lg">Documentation</h3>
+            <h3 className="font-semibold text-lg">เอกสารประกอบ</h3>
             <p className="text-gray-500 text-sm">
-              Detailed guides and articles to help you get the most out of our
-              platform.
+              คู่มือและบทความโดยละเอียดเพื่อช่วยให้คุณใช้งานแพลตฟอร์มของเราได้อย่างเต็มประสิทธิภาพ
             </p>
             <Button variant="outline" className="w-full">
-              Browse Guides
+              เรียกดูคู่มือ
             </Button>
-          </div>
+          </motion.div>
 
-          <div className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm hover:shadow-md transition-shadow text-center space-y-4">
+          <motion.div
+            className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm hover:shadow-md transition-shadow text-center space-y-4"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.4 }}
+            whileHover={{ y: -5 }}
+          >
             <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto">
               <MessageCircle className="w-6 h-6 text-green-600" />
             </div>
-            <h3 className="font-semibold text-lg">Community Forum</h3>
+            <h3 className="font-semibold text-lg">ฟอรัมชุมชน</h3>
             <p className="text-gray-500 text-sm">
-              Join the conversation, ask questions, and share ideas with other
-              users.
+              เข้าร่วมการสนทนา ถามคำถาม และแชร์ไอเดียกับผู้ใช้รายอื่น
             </p>
             <Button variant="outline" className="w-full">
-              Visit Forum
+              เยี่ยมชมฟอรัม
             </Button>
-          </div>
+          </motion.div>
 
-          <div className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm hover:shadow-md transition-shadow text-center space-y-4">
+          <motion.div
+            className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm hover:shadow-md transition-shadow text-center space-y-4"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.5 }}
+            whileHover={{ y: -5 }}
+          >
             <div className="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center mx-auto">
               <Phone className="w-6 h-6 text-purple-600" />
             </div>
-            <h3 className="font-semibold text-lg">Contact Support</h3>
+            <h3 className="font-semibold text-lg">ติดต่อฝ่ายสนับสนุน</h3>
             <p className="text-gray-500 text-sm">
-              Can't find what you're looking for? Our support team is here to
-              help.
+              หาไม่พบสิ่งที่คุณกำลังมองหาหรือไม่? ทีมสนับสนุนของเราพร้อมช่วยเหลือคุณ
             </p>
             <Button variant="outline" className="w-full">
-              Contact Us
+              ติดต่อเรา
             </Button>
-          </div>
+          </motion.div>
         </div>
 
         {/* FAQ Section */}
-        <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-8">
+        <motion.div
+          className="bg-white rounded-xl border border-gray-200 shadow-sm p-8"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.6 }}
+        >
           <h2 className="text-2xl font-bold mb-6">
-            Frequently Asked Questions
+            คำถามที่พบบ่อย
           </h2>
           <Accordion type="single" collapsible className="w-full">
             {faqs.map((faq, index) => (
-              <AccordionItem key={index} value={`item-${index}`}>
-                <AccordionTrigger className="text-left font-medium">
-                  {faq.question}
-                </AccordionTrigger>
-                <AccordionContent className="text-gray-600">
-                  {faq.answer}
-                </AccordionContent>
-              </AccordionItem>
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.3, delay: 0.7 + index * 0.1 }}
+              >
+                <AccordionItem value={`item-${index}`}>
+                  <AccordionTrigger className="text-left font-medium">
+                    {faq.question}
+                  </AccordionTrigger>
+                  <AccordionContent className="text-gray-600">
+                    {faq.answer}
+                  </AccordionContent>
+                </AccordionItem>
+              </motion.div>
             ))}
           </Accordion>
-        </div>
+        </motion.div>
 
         {/* Contact Form Section */}
-        <div className="bg-gray-50 rounded-xl border border-gray-200 p-8">
+        <motion.div
+          className="bg-gray-50 rounded-xl border border-gray-200 p-8"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 1.1 }}
+        >
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <div className="space-y-4">
-              <h2 className="text-2xl font-bold">Still need help?</h2>
+            <motion.div
+              className="space-y-4"
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.5, delay: 1.2 }}
+            >
+              <h2 className="text-2xl font-bold">ยังต้องการความช่วยเหลืออยู่หรือไม่?</h2>
               <p className="text-gray-600">
-                Send us a message and we'll get back to you as soon as possible.
+                ส่งข้อความถึงเราและเราจะติดต่อกลับโดยเร็วที่สุด
               </p>
-              <div className="flex items-center gap-3 text-gray-600">
+              <motion.div
+                className="flex items-center gap-3 text-gray-600"
+                whileHover={{ scale: 1.05 }}
+              >
                 <Mail className="w-5 h-5" />
                 <span>support@saletics.com</span>
-              </div>
-              <div className="flex items-center gap-3 text-gray-600">
+              </motion.div>
+              <motion.div
+                className="flex items-center gap-3 text-gray-600"
+                whileHover={{ scale: 1.05 }}
+              >
                 <Phone className="w-5 h-5" />
                 <span>+1 (555) 123-4567</span>
-              </div>
-            </div>
-            <div className="space-y-4">
+              </motion.div>
+            </motion.div>
+            <motion.div
+              className="space-y-4"
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.5, delay: 1.3 }}
+            >
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <label className="text-sm font-medium">First Name</label>
-                  <Input placeholder="John" />
+                  <label className="text-sm font-medium">ชื่อ</label>
+                  <Input placeholder="สมชาย" />
                 </div>
                 <div className="space-y-2">
-                  <label className="text-sm font-medium">Last Name</label>
-                  <Input placeholder="Doe" />
+                  <label className="text-sm font-medium">นามสกุล</label>
+                  <Input placeholder="ใจดี" />
                 </div>
               </div>
               <div className="space-y-2">
-                <label className="text-sm font-medium">Email</label>
-                <Input placeholder="john@example.com" type="email" />
+                <label className="text-sm font-medium">อีเมล</label>
+                <Input placeholder="somchai@example.com" type="email" />
               </div>
               <div className="space-y-2">
-                <label className="text-sm font-medium">Message</label>
+                <label className="text-sm font-medium">ข้อความ</label>
                 <Textarea
-                  placeholder="Describe your issue..."
+                  placeholder="อธิบายปัญหาของคุณ..."
                   className="min-h-[120px]"
                 />
               </div>
-              <Button className="w-full bg-blue-600 hover:bg-blue-700">
-                Send Message
-              </Button>
-            </div>
+              <motion.div
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+              >
+                <Button className="w-full bg-blue-600 hover:bg-blue-700">
+                  ส่งข้อความ
+                </Button>
+              </motion.div>
+            </motion.div>
           </div>
-        </div>
+        </motion.div>
       </div>
     </Layout>
   );

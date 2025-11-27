@@ -37,19 +37,19 @@ export function EngineeringProgressChart() {
         <div className="flex items-center justify-between">
           <div>
             <CardTitle className="text-gray-900 text-lg font-semibold">
-              Engineering Progress Overview
+              ภาพรวมความคืบหน้างานวิศวกรรม
             </CardTitle>
             <CardDescription className="text-gray-500 text-sm">
-              Progress by department vs target
+              ความคืบหน้าตามแผนกเทียบกับเป้าหมาย
             </CardDescription>
             <p className="text-xs text-blue-600 font-medium mt-2 flex items-center gap-1">
               <span className="inline-block w-2 h-2 rounded-full bg-blue-500"></span>
-              Overall Progress: {Math.round(overallProgress)}% | Target:{" "}
+              ความคืบหน้ารวม: {Math.round(overallProgress)}% | เป้าหมาย:{" "}
               {Math.round(overallTarget)}%
             </p>
           </div>
           <button className="px-3 py-1.5 text-xs font-medium text-gray-600 bg-gray-50 border border-gray-200 rounded-lg hover:bg-gray-100 transition-colors cursor-pointer">
-            Current
+            ปัจจุบัน
           </button>
         </div>
       </CardHeader>
@@ -103,7 +103,7 @@ export function EngineeringProgressChart() {
                             style={{ backgroundColor: data.color }}
                           />
                           <span className="text-xs text-gray-500">
-                            Progress:
+                            ความคืบหน้า:
                           </span>
                           <span className="text-sm font-medium text-gray-900">
                             {data.progress}%
@@ -111,7 +111,7 @@ export function EngineeringProgressChart() {
                         </div>
                         <div className="flex items-center gap-2">
                           <div className="w-2 h-2 rounded-full bg-gray-300" />
-                          <span className="text-xs text-gray-500">Target:</span>
+                          <span className="text-xs text-gray-500">เป้าหมาย:</span>
                           <span className="text-sm font-medium text-gray-900">
                             {data.target}%
                           </span>
@@ -127,10 +127,10 @@ export function EngineeringProgressChart() {
                             }`}
                           >
                             {data.progress >= data.target
-                              ? "On Track"
+                              ? "ตามแผน"
                               : data.progress >= data.target * 0.9
-                              ? "At Risk"
-                              : "Behind"}
+                              ? "เสี่ยง"
+                              : "ล่าช้า"}
                           </span>
                         </div>
                       </div>
@@ -143,7 +143,7 @@ export function EngineeringProgressChart() {
                 dataKey="progress"
                 barSize={20}
                 radius={[0, 4, 4, 0]}
-                background={{ fill: "#f3f4f6", radius: [0, 4, 4, 0] }}
+                background={{ fill: "#f3f4f6" }}
               >
                 {data.map((entry, index) => (
                   <Cell key={`cell-${index}`} fill={entry.color} />

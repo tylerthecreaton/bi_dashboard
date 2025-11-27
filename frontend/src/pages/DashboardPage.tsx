@@ -13,7 +13,7 @@ import { Button } from "@/components/ui/button";
 export function DashboardPage() {
   const { addNotification } = useNotifications();
   const handleExport = () => {
-    toast.success("Export data successfully");
+    toast.success("ส่งออกรายงานโปรเจคสำเร็จ");
   };
 
   const container = {
@@ -37,7 +37,7 @@ export function DashboardPage() {
         <DashboardHeader onExport={handleExport} />
 
         <motion.main
-          className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8"
+          className="max-w mx-auto px-4 sm:px-6 lg:px-8 py-8"
           variants={container}
           initial="hidden"
           animate="show"
@@ -46,20 +46,20 @@ export function DashboardPage() {
             <Button
               onClick={() =>
                 addNotification({
-                  title: "Test Notification",
-                  message: "This is a test notification triggered manually.",
+                  title: "ทดสอบการแจ้งเตือนโปรเจค",
+                  message: "นี่คือการแจ้งเตือนทดสอบเกี่ยวกับสถานะโปรเจค",
                   type: "info",
                 })
               }
             >
-              Test Notification
+              ทดสอบการแจ้งเตือนโปรเจค
             </Button>
           </div>
           {/* Stats Grid */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
             <motion.div variants={item}>
               <StatCard
-                title="Total Profit"
+                title="รายได้รวมปีนี้"
                 value="$4,127.40"
                 change={2.81}
                 trend="up"
@@ -68,7 +68,7 @@ export function DashboardPage() {
             </motion.div>
             <motion.div variants={item}>
               <StatCard
-                title="Avg. Order Value"
+                title="มูลค่าโปรเจคเฉลี่ย"
                 value="$82.24"
                 change={2.96}
                 trend="up"
@@ -77,7 +77,7 @@ export function DashboardPage() {
             </motion.div>
             <motion.div variants={item}>
               <StatCard
-                title="Total Orders"
+                title="จำนวนโปรเจคทั้งหมด"
                 value="1,702"
                 change={-2.61}
                 trend="down"
@@ -86,7 +86,7 @@ export function DashboardPage() {
             </motion.div>
             <motion.div variants={item}>
               <StatCard
-                title="Lifetime Value"
+                title="Backlog ที่เหลือ"
                 value="$792"
                 change={2.14}
                 trend="up"

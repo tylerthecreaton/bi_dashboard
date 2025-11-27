@@ -4,8 +4,8 @@ import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from "recharts";
 export function SalesAnalyticsGauge() {
   const percentage = 72;
   const data = [
-    { name: "Sales", value: percentage, color: "#3b82f6" },
-    { name: "Remaining", value: 100 - percentage, color: "#f3f4f6" },
+    { name: "โปรเจค", value: percentage, color: "#3b82f6" },
+    { name: "เหลือ", value: 100 - percentage, color: "#f3f4f6" },
   ];
 
   const renderCustomLabel = () => {
@@ -31,7 +31,7 @@ export function SalesAnalyticsGauge() {
         dominantBaseline="middle"
         className="text-sm fill-gray-500"
       >
-        Sales Percentage
+        เปอร์เซ็นต์ความคืบหน้า
       </text>
     );
   };
@@ -39,7 +39,9 @@ export function SalesAnalyticsGauge() {
   return (
     <Card className="border-gray-200 bg-white">
       <CardHeader>
-        <CardTitle className="text-gray-900">Sales Analytics</CardTitle>
+        <CardTitle className="text-gray-900">
+          สัดส่วนรายได้ตามประเภทธุรกิจ
+        </CardTitle>
       </CardHeader>
       <CardContent>
         <ResponsiveContainer width="100%" height={340}>
@@ -74,21 +76,23 @@ export function SalesAnalyticsGauge() {
             <div className="text-4xl font-bold text-gray-900">
               {percentage}%
             </div>
-            <div className="text-sm text-gray-500 mt-1">Sales Percentage</div>
+            <div className="text-sm text-gray-500 mt-1">
+              เปอร์เซ็นต์ความคืบหน้าโดยรวม
+            </div>
           </div>
         </div>
         <div className="mt-20 space-y-2">
           <div className="flex items-center justify-between text-sm">
             <div className="flex items-center gap-2">
               <div className="w-3 h-3 bg-blue-500 rounded-full"></div>
-              <span className="text-gray-700">Sales</span>
+              <span className="text-gray-700">โปรเจคที่ดำเนินการ</span>
             </div>
             <span className="font-semibold text-gray-900">{percentage}%</span>
           </div>
           <div className="flex items-center justify-between text-sm">
             <div className="flex items-center gap-2">
               <div className="w-3 h-3 bg-gray-200 rounded-full"></div>
-              <span className="text-gray-700">Remaining</span>
+              <span className="text-gray-700">โปรเจคที่คงเหลือ</span>
             </div>
             <span className="font-semibold text-gray-900">
               {100 - percentage}%

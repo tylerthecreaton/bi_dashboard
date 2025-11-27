@@ -41,18 +41,18 @@ export function ForecastBacklogChart() {
         <div className="flex items-center justify-between">
           <div>
             <CardTitle className="text-gray-900 text-lg font-semibold">
-              Forecast Backlog Analysis
+              การวิเคราะห์งานค้างดำเนินการที่คาดการณ์
             </CardTitle>
             <CardDescription className="text-gray-500 text-sm">
-              Actual and forecast backlog trends with new projects
+              แนวโน้มงานค้างดำเนินการจริงและที่คาดการณ์พร้อมโปรเจคใหม่
             </CardDescription>
             <p className="text-xs text-emerald-600 font-medium mt-2 flex items-center gap-1">
               <span className="inline-block w-2 h-2 rounded-full bg-emerald-500"></span>
-              Expected reduction: -{reduction.toFixed(1)}% by Q2 2025
+              คาดว่าจะลดลง: -{reduction.toFixed(1)}% ในไตรมาส 2 ปี 2025
             </p>
           </div>
           <button className="px-3 py-1.5 text-xs font-medium text-gray-600 bg-gray-50 border border-gray-200 rounded-lg hover:bg-gray-100 transition-colors cursor-pointer">
-            Quarterly
+            รายไตรมาส
           </button>
         </div>
       </CardHeader>
@@ -85,7 +85,7 @@ export function ForecastBacklogChart() {
                 axisLine={false}
                 tickLine={false}
                 tick={{ fill: "#6b7280", fontSize: 12 }}
-                tickFormatter={(value) => `$${value / 1000}K`}
+                tickFormatter={(value) => `${value / 1000}K บาท`}
               />
               <YAxis
                 yAxisId="right"
@@ -119,8 +119,8 @@ export function ForecastBacklogChart() {
                             </span>
                             <span className="text-sm font-medium text-gray-900">
                               {entry.value
-                                ? `$${entry.value.toLocaleString()}`
-                                : "N/A"}
+                                ? `${entry.value.toLocaleString()} บาท`
+                                : "ไม่มีข้อมูล"}
                             </span>
                           </div>
                         ))}
@@ -145,7 +145,7 @@ export function ForecastBacklogChart() {
                 stroke="#ef4444"
                 strokeDasharray="3 3"
                 label={{
-                  value: "Forecast",
+                  value: "คาดการณ์",
                   position: "top",
                   fill: "#ef4444",
                   fontSize: 10,
@@ -154,7 +154,7 @@ export function ForecastBacklogChart() {
               <Bar
                 yAxisId="right"
                 dataKey="newProjects"
-                name="New Projects"
+                name="โปรเจคใหม่"
                 fill="rgba(16, 185, 129, 0.7)"
                 radius={[4, 4, 0, 0]}
                 barSize={30}
@@ -163,7 +163,7 @@ export function ForecastBacklogChart() {
                 yAxisId="left"
                 type="monotone"
                 dataKey="actual"
-                name="Actual Backlog"
+                name="งานค้างดำเนินการจริง"
                 stroke="#3b82f6"
                 strokeWidth={3}
                 dot={{ r: 4, fill: "#3b82f6", strokeWidth: 0 }}
@@ -174,7 +174,7 @@ export function ForecastBacklogChart() {
                 yAxisId="left"
                 type="monotone"
                 dataKey="forecast"
-                name="Forecast Backlog"
+                name="งานค้างดำเนินการที่คาดการณ์"
                 stroke="#9ca3af"
                 strokeWidth={3}
                 strokeDasharray="5 5"
@@ -186,15 +186,15 @@ export function ForecastBacklogChart() {
         </div>
         <div className="mt-6 flex items-center justify-between text-sm text-gray-500 px-2 border-t border-gray-100 pt-4">
           <div className="flex flex-col">
-            <span className="text-xs text-gray-400">Current Backlog</span>
+            <span className="text-xs text-gray-400">งานค้างดำเนินการปัจจุบัน</span>
             <span className="font-semibold text-gray-900 text-base">
-              ${currentBacklog?.toLocaleString()}
+              {currentBacklog?.toLocaleString()} บาท
             </span>
           </div>
           <div className="flex flex-col text-right">
-            <span className="text-xs text-gray-400">Forecast (Q2 2025)</span>
+            <span className="text-xs text-gray-400">คาดการณ์ (ไตรมาส 2 2025)</span>
             <span className="font-semibold text-gray-900 text-base">
-              ${forecastEnd?.toLocaleString()}
+              {forecastEnd?.toLocaleString()} บาท
             </span>
           </div>
         </div>

@@ -97,15 +97,15 @@ const getStatusColor = (status: Project["status"]) => {
 const getStatusLabel = (status: Project["status"]) => {
   switch (status) {
     case "on-track":
-      return "On Track";
+      return "ตามแผน";
     case "at-risk":
-      return "At Risk";
+      return "เสี่ยง";
     case "delayed":
-      return "Delayed";
+      return "ล่าช้า";
     case "completed":
-      return "Completed";
+      return "เสร็จสิ้น";
     default:
-      return "Unknown";
+      return "ไม่ทราบ";
   }
 };
 
@@ -120,7 +120,7 @@ export function ProjectStatusTable() {
   return (
     <Card className="col-span-full border-gray-200 bg-white">
       <CardHeader className="flex flex-row items-center justify-between">
-        <CardTitle className="text-gray-900">Project Status Overview</CardTitle>
+        <CardTitle className="text-gray-900">ภาพรวมสถานะโปรเจค</CardTitle>
         <div className="flex gap-2">
           <Button
             variant="outline"
@@ -128,7 +128,7 @@ export function ProjectStatusTable() {
             className="gap-2 border-gray-300 text-gray-700 hover:bg-gray-50"
           >
             <Filter className="w-4 h-4" />
-            Filter
+            กรอง
           </Button>
           <Button
             variant="outline"
@@ -136,7 +136,7 @@ export function ProjectStatusTable() {
             className="gap-2 border-gray-300 text-gray-700 hover:bg-gray-50"
           >
             <Download className="w-4 h-4" />
-            Export
+            ส่งออก
           </Button>
         </div>
       </CardHeader>
@@ -146,25 +146,25 @@ export function ProjectStatusTable() {
             <thead>
               <tr className="border-b border-gray-200">
                 <th className="text-left py-3 px-4 font-semibold text-gray-700">
-                  Project Name
+                  ชื่อโปรเจค
                 </th>
                 <th className="text-left py-3 px-4 font-semibold text-gray-700">
-                  Client
+                  ลูกค้า
                 </th>
                 <th className="text-center py-3 px-4 font-semibold text-gray-700">
-                  Status
+                  สถานะ
                 </th>
                 <th className="text-center py-3 px-4 font-semibold text-gray-700">
-                  Progress
+                  ความคืบหน้า
                 </th>
                 <th className="text-left py-3 px-4 font-semibold text-gray-700">
-                  Timeline
+                  ระยะเวลา
                 </th>
                 <th className="text-right py-3 px-4 font-semibold text-gray-700">
-                  Value
+                  มูลค่า
                 </th>
                 <th className="text-center py-3 px-4 font-semibold text-gray-700">
-                  Actions
+                  การดำเนินการ
                 </th>
               </tr>
             </thead>
@@ -235,7 +235,7 @@ export function ProjectStatusTable() {
                       className="gap-1 text-gray-600 hover:text-gray-900"
                     >
                       <Eye className="w-4 h-4" />
-                      View
+                      ดู
                     </Button>
                   </td>
                 </tr>
@@ -244,24 +244,24 @@ export function ProjectStatusTable() {
           </table>
         </div>
         
-        {/* Status Summary */}
+        {/* สรุปสถานะ */}
         <div className="mt-6 pt-4 border-t border-gray-200">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             <div className="text-center">
               <div className="text-2xl font-bold text-green-600">2</div>
-              <div className="text-sm text-gray-600">On Track</div>
+              <div className="text-sm text-gray-600">ตามแผน</div>
             </div>
             <div className="text-center">
               <div className="text-2xl font-bold text-yellow-600">1</div>
-              <div className="text-sm text-gray-600">At Risk</div>
+              <div className="text-sm text-gray-600">เสี่ยง</div>
             </div>
             <div className="text-center">
               <div className="text-2xl font-bold text-red-600">1</div>
-              <div className="text-sm text-gray-600">Delayed</div>
+              <div className="text-sm text-gray-600">ล่าช้า</div>
             </div>
             <div className="text-center">
               <div className="text-2xl font-bold text-blue-600">1</div>
-              <div className="text-sm text-gray-600">Completed</div>
+              <div className="text-sm text-gray-600">เสร็จสิ้น</div>
             </div>
           </div>
         </div>

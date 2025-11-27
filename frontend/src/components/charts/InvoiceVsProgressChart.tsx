@@ -40,18 +40,18 @@ export function InvoiceVsProgressChart() {
         <div className="flex items-center justify-between">
           <div>
             <CardTitle className="text-gray-900 text-lg font-semibold">
-              Invoice vs Engineering Progress
+              การเรียกเก็บเงินเทียบกับความคืบหน้างานวิศวกรรม
             </CardTitle>
             <CardDescription className="text-gray-500 text-sm">
-              Correlation between invoiced amount and project progress
+              ความสัมพันธ์ระหว่างจำนวนเงินที่เรียกเก็บกับความคืบหน้าโปรเจค
             </CardDescription>
             <p className="text-xs text-emerald-600 font-medium mt-2 flex items-center gap-1">
               <span className="inline-block w-2 h-2 rounded-full bg-emerald-500"></span>
-              Strong correlation: 0.87
+              ความสัมพันธ์สูง: 0.87
             </p>
           </div>
           <button className="px-3 py-1.5 text-xs font-medium text-gray-600 bg-gray-50 border border-gray-200 rounded-lg hover:bg-gray-100 transition-colors cursor-pointer">
-            Current
+            ปัจจุบัน
           </button>
         </div>
       </CardHeader>
@@ -70,12 +70,12 @@ export function InvoiceVsProgressChart() {
               <XAxis
                 type="number"
                 dataKey="invoice"
-                name="Invoice Amount"
+                name="จำนวนเงินที่เรียกเก็บ"
                 unit="K"
-                tickFormatter={(value) => `$${value}`}
+                tickFormatter={(value) => `${value}K บาท`}
                 tick={{ fill: "#6b7280", fontSize: 12 }}
                 label={{
-                  value: "Invoice Amount ($K)",
+                  value: "จำนวนเงินที่เรียกเก็บ (K บาท)",
                   position: "bottom",
                   offset: 0,
                   fill: "#374151",
@@ -86,12 +86,12 @@ export function InvoiceVsProgressChart() {
               <YAxis
                 type="number"
                 dataKey="progress"
-                name="Progress"
+                name="ความคืบหน้า"
                 unit="%"
                 domain={[0, 100]}
                 tick={{ fill: "#6b7280", fontSize: 12 }}
                 label={{
-                  value: "Engineering Progress (%)",
+                  value: "ความคืบหน้างานวิศวกรรม (%)",
                   angle: -90,
                   position: "insideLeft",
                   fill: "#374151",
@@ -103,7 +103,7 @@ export function InvoiceVsProgressChart() {
                 type="number"
                 dataKey="value"
                 range={[100, 800]}
-                name="Project Value"
+                name="มูลค่าโปรเจค"
               />
               <Tooltip
                 cursor={{ strokeDasharray: "3 3" }}
@@ -118,15 +118,15 @@ export function InvoiceVsProgressChart() {
                         <div className="space-y-1">
                           <div className="flex items-center justify-between gap-4">
                             <span className="text-xs text-gray-500">
-                              Invoice:
+                              เรียกเก็บ:
                             </span>
                             <span className="text-sm font-medium text-gray-900">
-                              ${data.invoice.toLocaleString()}K
+                              {data.invoice.toLocaleString()}K บาท
                             </span>
                           </div>
                           <div className="flex items-center justify-between gap-4">
                             <span className="text-xs text-gray-500">
-                              Progress:
+                              ความคืบหน้า:
                             </span>
                             <span className="text-sm font-medium text-gray-900">
                               {data.progress}%
@@ -134,10 +134,10 @@ export function InvoiceVsProgressChart() {
                           </div>
                           <div className="flex items-center justify-between gap-4">
                             <span className="text-xs text-gray-500">
-                              Value:
+                              มูลค่า:
                             </span>
                             <span className="text-sm font-medium text-gray-900">
-                              ${data.value.toLocaleString()}K
+                              {data.value.toLocaleString()}K บาท
                             </span>
                           </div>
                         </div>
@@ -154,15 +154,15 @@ export function InvoiceVsProgressChart() {
                   <div className="flex items-center justify-end gap-4 text-xs text-gray-600 mb-2">
                     <div className="flex items-center gap-1">
                       <span className="w-2 h-2 rounded-full bg-emerald-500 opacity-80"></span>
-                      <span>Ahead of Progress</span>
+                      <span>เกินความคืบหน้า</span>
                     </div>
                     <div className="flex items-center gap-1">
                       <span className="w-2 h-2 rounded-full bg-red-500 opacity-80"></span>
-                      <span>Behind Progress</span>
+                      <span>ล่าช้ากว่าความคืบหน้า</span>
                     </div>
                     <div className="flex items-center gap-1">
                       <span className="w-4 h-0.5 bg-gray-300 border-t border-dashed border-gray-400"></span>
-                      <span>Ideal Correlation</span>
+                      <span>ความสัมพันธ์ที่เหมาะสม</span>
                     </div>
                   </div>
                 )}
@@ -177,7 +177,7 @@ export function InvoiceVsProgressChart() {
                 strokeDasharray="5 5"
                 strokeWidth={2}
               />
-              <Scatter name="Projects" data={data}>
+              <Scatter name="โปรเจค" data={data}>
                 {data.map((entry, index) => {
                   // Simple logic to determine color: if progress % > (invoice / maxInvoice) * 100, it's "good" (green)
                   // This assumes linear correlation where max invoice should equal 100% progress
@@ -203,13 +203,13 @@ export function InvoiceVsProgressChart() {
         </div>
         <div className="mt-6 flex items-center justify-between text-sm text-gray-500 px-2 border-t border-gray-100 pt-4">
           <div className="flex flex-col">
-            <span className="text-xs text-gray-400">Correlation</span>
+            <span className="text-xs text-gray-400">ความสัมพันธ์</span>
             <span className="font-semibold text-gray-900 text-base">0.87</span>
           </div>
           <div className="flex flex-col text-right">
-            <span className="text-xs text-gray-400">Bubble Size</span>
+            <span className="text-xs text-gray-400">ขนาดบับเบิล</span>
             <span className="font-semibold text-gray-900 text-base">
-              Project Value
+              มูลค่าโปรเจค
             </span>
           </div>
         </div>

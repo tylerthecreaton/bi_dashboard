@@ -41,18 +41,18 @@ export function CashFlowChart() {
         <div className="flex items-center justify-between">
           <div>
             <CardTitle className="text-gray-900 text-lg font-semibold">
-              Cash Flow Analysis
+              การวิเคราะห์กระแสเงินสด
             </CardTitle>
             <CardDescription className="text-gray-500 text-sm">
-              Monthly cash in and cash out trends
+              แนวโน้มการรับและจ่ายเงินสดรายเดือน
             </CardDescription>
             <p className="text-xs text-emerald-600 font-medium mt-2 flex items-center gap-1">
               <span className="inline-block w-2 h-2 rounded-full bg-emerald-500"></span>
-              Positive cash flow: ${(netFlow / 1000).toFixed(1)}M this month
+             กระแสเงินสดเป็นบวก: {(netFlow / 1000).toFixed(1)}M บาทในเดือนนี้
             </p>
           </div>
           <button className="px-3 py-1.5 text-xs font-medium text-gray-600 bg-gray-50 border border-gray-200 rounded-lg hover:bg-gray-100 transition-colors cursor-pointer">
-            Monthly
+            รายเดือน
           </button>
         </div>
       </CardHeader>
@@ -94,7 +94,7 @@ export function CashFlowChart() {
                 axisLine={false}
                 tickLine={false}
                 tick={{ fill: "#6b7280", fontSize: 12 }}
-                tickFormatter={(value) => `$${value / 1000}M`}
+                tickFormatter={(value) => `${value / 1000}M บาท`}
               />
               <Tooltip
                 cursor={{
@@ -112,24 +112,24 @@ export function CashFlowChart() {
                         <div className="flex items-center gap-2 mb-1">
                           <div className="w-2 h-2 rounded-full bg-emerald-500" />
                           <span className="text-xs text-gray-500">
-                            Cash In:
+                            เงินเข้า:
                           </span>
                           <span className="text-sm font-medium text-gray-900">
-                            ${payload[0].value?.toLocaleString()}
+                            {payload[0].value?.toLocaleString()} บาท
                           </span>
                         </div>
                         <div className="flex items-center gap-2">
                           <div className="w-2 h-2 rounded-full bg-red-500" />
                           <span className="text-xs text-gray-500">
-                            Cash Out:
+                            เงินออก:
                           </span>
                           <span className="text-sm font-medium text-gray-900">
-                            ${payload[1].value?.toLocaleString()}
+                            {payload[1].value?.toLocaleString()} บาท
                           </span>
                         </div>
                         <div className="mt-2 pt-2 border-t border-gray-100 flex justify-between items-center">
                           <span className="text-xs text-gray-500">
-                            Net Flow:
+                           สุทธิ:
                           </span>
                           <span
                             className={`text-sm font-bold ${
@@ -140,11 +140,10 @@ export function CashFlowChart() {
                                 : "text-red-600"
                             }`}
                           >
-                            $
                             {(
                               (payload[0].value as number) -
                               (payload[1].value as number)
-                            ).toLocaleString()}
+                            ).toLocaleString()} บาท
                           </span>
                         </div>
                       </div>
@@ -166,7 +165,7 @@ export function CashFlowChart() {
               <Area
                 type="monotone"
                 dataKey="income"
-                name="Cash In"
+                name="เงินเข้า"
                 stroke="#10b981"
                 strokeWidth={2}
                 fillOpacity={1}
@@ -175,7 +174,7 @@ export function CashFlowChart() {
               <Area
                 type="monotone"
                 dataKey="expense"
-                name="Cash Out"
+                name="เงินออก"
                 stroke="#ef4444"
                 strokeWidth={2}
                 fillOpacity={1}
@@ -186,27 +185,25 @@ export function CashFlowChart() {
         </div>
         <div className="mt-6 grid grid-cols-3 gap-4 border-t border-gray-100 pt-4">
           <div className="flex flex-col">
-            <span className="text-xs text-gray-400">Total Cash In</span>
+            <span className="text-xs text-gray-400">เงินเข้ารวม</span>
             <span className="font-semibold text-gray-900 text-base">
-              $
               {(
                 data.reduce((acc, curr) => acc + curr.income, 0) / 1000
               ).toFixed(1)}
-              M
+              M บาท
             </span>
           </div>
           <div className="flex flex-col">
-            <span className="text-xs text-gray-400">Total Cash Out</span>
+            <span className="text-xs text-gray-400">เงินออกรวม</span>
             <span className="font-semibold text-gray-900 text-base">
-              $
               {(
                 data.reduce((acc, curr) => acc + curr.expense, 0) / 1000
               ).toFixed(1)}
-              M
+              M บาท
             </span>
           </div>
           <div className="flex flex-col text-right">
-            <span className="text-xs text-gray-400">Net Cash Flow</span>
+            <span className="text-xs text-gray-400">กระแสเงินสดสุทธิ</span>
             <span
               className={`font-semibold text-base ${
                 data.reduce(
@@ -217,14 +214,13 @@ export function CashFlowChart() {
                   : "text-red-600"
               }`}
             >
-              $
               {(
                 data.reduce(
                   (acc, curr) => acc + (curr.income - curr.expense),
                   0
                 ) / 1000
               ).toFixed(1)}
-              M
+              M บาท
             </span>
           </div>
         </div>

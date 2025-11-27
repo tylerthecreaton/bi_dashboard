@@ -37,19 +37,19 @@ export function GrossProfitByVerticalChart() {
         <div className="flex items-center justify-between">
           <div>
             <CardTitle className="text-gray-900 text-lg font-semibold">
-              Gross Profit by Vertical
+              กำไรขั้นต้นตาม Vertical
             </CardTitle>
             <CardDescription className="text-gray-500 text-sm">
-              Gross profit breakdown by industry vertical
+              การแบ่งกำไรขั้นต้นตามกลุ่มอุตสาหกรรม
             </CardDescription>
             <p className="text-xs text-emerald-600 font-medium mt-2 flex items-center gap-1">
               <span className="inline-block w-2 h-2 rounded-full bg-emerald-500"></span>
-              {maxProfitItem.name} leads with $
-              {(maxProfitItem.value / 1000).toFixed(1)}M profit
+              {maxProfitItem.name} สูงสุดที่
+              {(maxProfitItem.value / 1000).toFixed(1)}M บาท
             </p>
           </div>
           <button className="px-3 py-1.5 text-xs font-medium text-gray-600 bg-gray-50 border border-gray-200 rounded-lg hover:bg-gray-100 transition-colors cursor-pointer">
-            Current Year
+            ปีปัจจุบัน
           </button>
         </div>
       </CardHeader>
@@ -81,7 +81,7 @@ export function GrossProfitByVerticalChart() {
                 axisLine={false}
                 tickLine={false}
                 tick={{ fill: "#6b7280", fontSize: 12 }}
-                tickFormatter={(value) => `$${value}K`}
+                tickFormatter={(value) => `${value}K บาท`}
               />
               <Tooltip
                 cursor={{ fill: "#f9fafb" }}
@@ -100,9 +100,9 @@ export function GrossProfitByVerticalChart() {
                           </p>
                         </div>
                         <p className="text-sm text-gray-600 pl-4">
-                          Profit:{" "}
+                          กำไร:{" "}
                           <span className="font-medium text-gray-900">
-                            ${data.value.toLocaleString()}K
+                            {data.value.toLocaleString()}K บาท
                           </span>
                         </p>
                       </div>
@@ -125,13 +125,13 @@ export function GrossProfitByVerticalChart() {
         </div>
         <div className="mt-6 flex items-center justify-between text-sm text-gray-500 px-2 border-t border-gray-100 pt-4">
           <div className="flex flex-col">
-            <span className="text-xs text-gray-400">Total Profit</span>
+            <span className="text-xs text-gray-400">กำไรรวม</span>
             <span className="font-semibold text-gray-900 text-base">
-              ${(totalProfit / 1000).toFixed(1)}M
+              {(totalProfit / 1000).toFixed(1)}M บาท
             </span>
           </div>
           <div className="flex flex-col text-right">
-            <span className="text-xs text-gray-400">Highest Performing</span>
+            <span className="text-xs text-gray-400">ประสิทธิภาพสูงสุด</span>
             <span className="font-semibold text-gray-900 text-base">
               {maxProfitItem.name}
             </span>

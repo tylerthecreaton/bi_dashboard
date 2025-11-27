@@ -16,8 +16,8 @@ import { useState, useMemo } from "react";
 interface Product {
   id: string;
   name: string;
-  category: "Electronics" | "Clothing" | "Accessories" | "Home";
-  status: "In Stock" | "Low Stock" | "Out of Stock";
+  category: "โปรเจค" | "บริการ" | "จัดจำหน่าย" | "อื่นๆ";
+  status: "กำลังดำเนินการ" | "เหลือเวลาน้อย" | "เสร็จสิ้น";
   revenue: number;
   sales: number;
   reviews: number;
@@ -30,9 +30,9 @@ type SortDirection = "asc" | "desc";
 const SAMPLE_DATA: Product[] = [
   {
     id: "1",
-    name: "NB Men's Running Shoes",
-    category: "Clothing",
-    status: "In Stock",
+    name: "โปรเจคพัฒนาระบบ ERP",
+    category: "โปรเจค",
+    status: "กำลังดำเนินการ",
     revenue: 29938.72,
     sales: 1572,
     reviews: 1829,
@@ -40,9 +40,9 @@ const SAMPLE_DATA: Product[] = [
   },
   {
     id: "2",
-    name: "Men's Minimalist Watch",
-    category: "Accessories",
-    status: "Low Stock",
+    name: "บริการดูแลระบบคลาวด์",
+    category: "บริการ",
+    status: "เหลือเวลาน้อย",
     revenue: 19281.9,
     sales: 1208,
     reviews: 1227,
@@ -50,9 +50,9 @@ const SAMPLE_DATA: Product[] = [
   },
   {
     id: "3",
-    name: "Maxim Premium T-Shirt",
-    category: "Clothing",
-    status: "In Stock",
+    name: "โปรเจคติดตั้งเครือข่าย",
+    category: "โปรเจค",
+    status: "กำลังดำเนินการ",
     revenue: 16430.63,
     sales: 1985,
     reviews: 1072,
@@ -60,9 +60,9 @@ const SAMPLE_DATA: Product[] = [
   },
   {
     id: "4",
-    name: "Smart Home Speaker",
-    category: "Electronics",
-    status: "In Stock",
+    name: "จัดจำหน่ายอุปกรณ์คอมพิวเตอร์",
+    category: "จัดจำหน่าย",
+    status: "กำลังดำเนินการ",
     revenue: 14200.5,
     sales: 850,
     reviews: 450,
@@ -70,9 +70,9 @@ const SAMPLE_DATA: Product[] = [
   },
   {
     id: "5",
-    name: "Leather Wallet",
-    category: "Accessories",
-    status: "Out of Stock",
+    name: "บริการให้คำปรึกษาด้านไอที",
+    category: "บริการ",
+    status: "เสร็จสิ้น",
     revenue: 5400.0,
     sales: 120,
     reviews: 85,
@@ -80,9 +80,9 @@ const SAMPLE_DATA: Product[] = [
   },
   {
     id: "6",
-    name: "Ceramic Coffee Mug",
-    category: "Home",
-    status: "In Stock",
+    name: "โปรเจคอื่นๆ",
+    category: "อื่นๆ",
+    status: "กำลังดำเนินการ",
     revenue: 2300.25,
     sales: 450,
     reviews: 120,
@@ -174,7 +174,7 @@ export function SalesTable() {
     <Card className="col-span-full border-gray-200 bg-white">
       <CardHeader className="flex flex-col space-y-4">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-          <CardTitle className="text-gray-900">Product Sales</CardTitle>
+          <CardTitle className="text-gray-900">สถานะโปรเจค</CardTitle>
           <div className="flex gap-2">
             <Popover>
               <PopoverTrigger asChild>
@@ -188,7 +188,7 @@ export function SalesTable() {
                   }`}
                 >
                   <Filter className="w-4 h-4" />
-                  Filter
+                  กรอง
                   {activeFilterCount > 0 && (
                     <Badge
                       variant="secondary"
@@ -202,7 +202,7 @@ export function SalesTable() {
               <PopoverContent className="w-56 p-4" align="end">
                 <div className="space-y-4">
                   <div className="flex items-center justify-between">
-                    <h4 className="font-medium leading-none">Filters</h4>
+                    <h4 className="font-medium leading-none">ตัวกรอง</h4>
                     {activeFilterCount > 0 && (
                       <Button
                         variant="ghost"
@@ -210,14 +210,14 @@ export function SalesTable() {
                         className="h-auto p-0 text-xs text-gray-500 hover:text-gray-900"
                         onClick={clearFilters}
                       >
-                        Clear all
+                        ล้างทั้งหมด
                       </Button>
                     )}
                   </div>
                   <Separator />
                   <div className="space-y-2">
                     <h5 className="text-sm font-medium text-gray-900">
-                      Category
+                      หมวดหมู่
                     </h5>
                     {categories.map((category) => (
                       <div
@@ -240,9 +240,7 @@ export function SalesTable() {
                   </div>
                   <Separator />
                   <div className="space-y-2">
-                    <h5 className="text-sm font-medium text-gray-900">
-                      Status
-                    </h5>
+                    <h5 className="text-sm font-medium text-gray-900">สถานะ</h5>
                     {statuses.map((status) => (
                       <div key={status} className="flex items-center space-x-2">
                         <Checkbox
@@ -268,14 +266,14 @@ export function SalesTable() {
               className="gap-2 border-gray-300 text-gray-700 hover:bg-gray-50"
             >
               <Download className="w-4 h-4" />
-              Export
+              ส่งออก
             </Button>
           </div>
         </div>
         <div className="relative">
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
           <Input
-            placeholder="Search products..."
+            placeholder="ค้นหาโปรเจค..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             className="pl-10 border-gray-300 focus:border-blue-500"
@@ -326,19 +324,19 @@ export function SalesTable() {
                     onClick={() => handleSort("name")}
                     className="flex items-center gap-1 hover:text-blue-600 transition-colors"
                   >
-                    Product
+                    โปรเจค
                     <ArrowUpDown className="w-3 h-3" />
                   </button>
                 </th>
                 <th className="text-left py-3 px-4 font-semibold text-gray-700">
-                  Status
+                  สถานะ
                 </th>
                 <th className="text-right py-3 px-4 font-semibold text-gray-700">
                   <button
                     onClick={() => handleSort("revenue")}
                     className="flex items-center gap-1 justify-end hover:text-blue-600 transition-colors"
                   >
-                    Revenue
+                    มูลค่าโปรเจค
                     <ArrowUpDown className="w-3 h-3" />
                   </button>
                 </th>
@@ -347,7 +345,7 @@ export function SalesTable() {
                     onClick={() => handleSort("sales")}
                     className="flex items-center gap-1 justify-end hover:text-blue-600 transition-colors"
                   >
-                    Sales
+                    ความคืบหน้า
                     <ArrowUpDown className="w-3 h-3" />
                   </button>
                 </th>
@@ -356,7 +354,7 @@ export function SalesTable() {
                     onClick={() => handleSort("reviews")}
                     className="flex items-center gap-1 justify-end hover:text-blue-600 transition-colors"
                   >
-                    Reviews
+                    รีวิว
                     <ArrowUpDown className="w-3 h-3" />
                   </button>
                 </th>
@@ -365,7 +363,7 @@ export function SalesTable() {
                     onClick={() => handleSort("views")}
                     className="flex items-center gap-1 justify-end hover:text-blue-600 transition-colors"
                   >
-                    Views
+                    การดู
                     <ArrowUpDown className="w-3 h-3" />
                   </button>
                 </th>
@@ -397,17 +395,17 @@ export function SalesTable() {
                       variant="outline"
                       className={`
                         ${
-                          product.status === "In Stock"
+                          product.status === "กำลังดำเนินการ"
                             ? "bg-green-50 text-green-700 border-green-200"
                             : ""
                         }
                         ${
-                          product.status === "Low Stock"
+                          product.status === "เหลือเวลาน้อย"
                             ? "bg-yellow-50 text-yellow-700 border-yellow-200"
                             : ""
                         }
                         ${
-                          product.status === "Out of Stock"
+                          product.status === "เสร็จสิ้น"
                             ? "bg-red-50 text-red-700 border-red-200"
                             : ""
                         }
@@ -425,14 +423,14 @@ export function SalesTable() {
                       })}
                     </div>
                     <div className="text-xs text-gray-500">
-                      ${(product.revenue / product.sales).toFixed(2)} avg
+                      ${(product.revenue / product.sales).toFixed(2)} ต่อหน่วย
                     </div>
                   </td>
                   <td className="text-right py-4 px-4">
                     <div className="font-medium text-gray-900">
                       {product.sales.toLocaleString()}
                     </div>
-                    <div className="text-xs text-gray-500">units</div>
+                    <div className="text-xs text-gray-500">เปอร์เซ็นต์</div>
                   </td>
                   <td className="text-right py-4 px-4">
                     <div className="font-medium text-gray-900">
@@ -440,14 +438,14 @@ export function SalesTable() {
                     </div>
                     <div className="text-xs text-gray-500">
                       {((product.reviews / product.views) * 100).toFixed(1)}%
-                      rate
+                      ความพึงพอใจ
                     </div>
                   </td>
                   <td className="text-right py-4 px-4">
                     <div className="font-medium text-gray-900">
                       {product.views.toLocaleString()}
                     </div>
-                    <div className="text-xs text-gray-500">total views</div>
+                    <div className="text-xs text-gray-500">ทีมที่รับผิดชอบ</div>
                   </td>
                 </tr>
               ))}
